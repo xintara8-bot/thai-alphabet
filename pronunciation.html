@@ -10,6 +10,8 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;width:100%;}
 #home{display:flex;flex-direction:column;align-items:center;padding:48px 20px 40px;min-height:100vh;}
+.home-topbar{width:100%;display:flex;justify-content:flex-start;margin-bottom:20px;}
+.home-back-link{text-decoration:none;display:flex;align-items:center;justify-content:center;}
 .home-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;text-align:center;}
 .home-sub{font-size:.9rem;color:var(--soft);margin-bottom:36px;text-align:center;}
 .section-label{font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--soft);font-weight:600;width:100%;margin-bottom:10px;}
@@ -92,6 +94,9 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 <body>
 
 <div id="home">
+  <div class="home-topbar">
+    <a class="home-back-link back-btn" href="index.html" aria-label="Back to lessons">←</a>
+  </div>
   <div class="home-title">Thai Alphabet</div>
   <div class="home-sub">Module 1 · Pronunciation Recognition</div>
   <div class="section-label">Phase</div>
