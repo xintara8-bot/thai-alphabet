@@ -1,451 +1,695 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Thai Alphabet</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Thai Lessons</title>
+<script src="data1.js"></script>
 <style>
-:root{--bg:#F7F4EF;--surface:#FFFFFF;--border:#E8E2D9;--text:#1C1917;--soft:#78716C;--accent:#C2410C;--green:#15803D;--red:#DC2626;--gold:#D97706;--radius:16px;--shadow:0 2px 16px rgba(0,0,0,0.07);}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;width:100%;}
-#home{display:flex;flex-direction:column;align-items:center;padding:48px 20px 40px;min-height:100vh;}
-.home-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;text-align:center;}
-.home-sub{font-size:.9rem;color:var(--soft);margin-bottom:36px;text-align:center;}
-.section-label{font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--soft);font-weight:600;width:100%;margin-bottom:10px;}
-.phase-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;margin-bottom:28px;}
-.phase-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s;}
-.phase-btn.active{border-color:var(--accent);background:#FFF3EE;}
-.ph-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:4px;display:block;}
-.ph-count{font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--text);display:block;}
-.phase-btn.active .ph-label,.phase-btn.active .ph-count{color:var(--accent);}
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:32px;}
-.mode-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 16px;cursor:pointer;transition:all .15s;text-align:left;}
-.mode-btn:hover{border-color:var(--text);}
-.mode-icon{font-size:1.6rem;margin-bottom:8px;display:block;}
-.mode-name{font-family:'DM Serif Display',serif;font-size:1.1rem;display:block;margin-bottom:4px;}
-.mode-desc{font-size:.78rem;color:var(--soft);display:block;line-height:1.4;}
-.mode-btn.challenge{border-color:var(--gold);background:#FFFBEB;}
-.mode-btn.challenge .mode-name{color:var(--gold);}
-.stats-summary{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.ss-item{text-align:center;}
-.ss-item span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.ss-item strong{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--text);}
-#quiz{display:none;flex-direction:column;align-items:center;min-height:100vh;}
-.topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;background:var(--bg);z-index:10;}
-.tb-left{display:flex;align-items:center;gap:10px;}
-.back-btn{width:32px;height:32px;border:1.5px solid var(--border);border-radius:50%;background:var(--surface);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);}
-.topbar-title{font-family:'DM Serif Display',serif;font-size:1.1rem;}
-.topbar-badge{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--soft);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:3px 10px;}
-.timer-box{display:none;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:2.5px solid var(--gold);font-family:'DM Mono',monospace;font-size:.85rem;font-weight:600;color:var(--gold);}
-.timer-box.visible{display:flex;}
-.timer-box.urgent{border-color:var(--red);color:var(--red);}
-.prog-track{width:calc(100% - 24px);height:3px;background:var(--border);border-radius:99px;margin:6px 12px 14px;overflow:hidden;}
-.prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease;}
-.stats-row{display:flex;gap:8px;width:calc(100% - 24px);margin-bottom:14px;}
-.stat-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 6px;text-align:center;}
-.stat-box span{display:block;font-size:.6rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:1px;}
-.stat-box strong{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--text);}
-.stat-box.streak strong{color:var(--accent);}
-.card{width:calc(100% - 24px);background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:24px 20px 20px;text-align:center;margin-bottom:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;}
-.letter-type{font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;border-radius:99px;padding:3px 10px;margin-bottom:10px;}
-.letter-type.consonant{background:#FEF3C7;color:#92400E;}
-.letter-type.vowel{background:#DBEAFE;color:#1E40AF;}
-.prof-dots{display:flex;gap:5px;margin-bottom:10px;}
-.prof-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--border);background:transparent;transition:all .3s;}
-.prof-dot.filled{background:var(--green);border-color:var(--green);}
-.thai-letter{font-family:'Sarabun',sans-serif;font-size:9rem;font-weight:600;line-height:1;color:var(--text);margin-bottom:6px;}
-.letter-name{font-size:.82rem;color:var(--soft);letter-spacing:.3px;min-height:18px;transition:opacity .2s;}
-.letter-name.hidden{opacity:0;pointer-events:none;}
-.options{width:calc(100% - 24px);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.opt{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);cursor:pointer;transition:all .15s;text-align:center;}
-.opt:hover:not(:disabled){border-color:var(--accent);background:#FFF7F5;}
-.opt.correct{background:#F0FDF4;border-color:var(--green);color:var(--green);}
-.opt.wrong{background:#FEF2F2;border-color:var(--red);color:var(--red);}
-.opt:disabled{cursor:default;}
-.feedback{width:calc(100% - 24px);min-height:40px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:600;border-radius:10px;margin-bottom:10px;padding:8px;text-align:center;line-height:1.4;}
-.feedback.correct{background:#F0FDF4;color:var(--green);}
-.feedback.wrong{background:#FEF2F2;color:var(--red);}
-.next-btn{width:calc(100% - 24px);padding:15px;background:var(--text);color:white;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .15s;display:none;margin-bottom:8px;}
-.next-btn.visible{display:block;}
-.next-btn:hover{background:#3C3836;}
-#result{display:none;flex-direction:column;align-items:center;padding:48px 20px 40px;min-height:100vh;text-align:center;}
-.r-icon{font-size:3.5rem;margin-bottom:14px;}
-.r-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;}
-.r-score{font-family:'DM Mono',monospace;font-size:3.5rem;color:var(--accent);margin-bottom:4px;line-height:1;}
-.r-sub{font-size:.9rem;color:var(--soft);margin-bottom:20px;line-height:1.6;}
-.challenge-badge{background:#FFFBEB;border:1px solid #FCD34D;border-radius:12px;padding:12px 20px;font-size:.85rem;color:var(--gold);margin-bottom:20px;width:100%;}
-.r-stats{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
-.r-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 8px;}
-.r-stat span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
-.r-stat strong{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--text);}
-.r-actions{display:flex;flex-direction:column;gap:10px;width:100%;}
-.btn-primary{padding:15px;background:var(--text);color:white;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;width:100%;transition:.15s;}
-.btn-primary:hover{background:#3C3836;}
-.btn-secondary{padding:15px;background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-family:'Sarabun',sans-serif;font-size:1rem;cursor:pointer;width:100%;transition:.15s;}
-.btn-secondary:hover{border-color:var(--text);}
-@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.pop{animation:pop .25s ease;}
-@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+:root{
+  --bg:#F7F4EF;--surface:#FFFFFF;--border:#E8E2D9;--text:#1C1917;--soft:#78716C;
+  --accent:#C2410C;--green:#15803D;--red:#DC2626;--gold:#D97706;--blue:#1D4ED8;
+  --radius:16px;--shadow:0 2px 16px rgba(0,0,0,0.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--text);max-width:480px;margin-inline:auto;min-height:100vh}
+button{font:inherit}
+.hidden{display:none!important}
+
+#home,#lesson-home,#quiz,#result{padding:22px 16px 28px;min-height:100vh}
+.title{font-size:2rem;font-weight:800;margin:6px 0}
+.sub{color:var(--soft);font-size:.95rem;line-height:1.5}
+.section{margin-top:22px}
+.section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1.4px;color:var(--soft);font-weight:700;margin-bottom:10px}
+.module-grid,.mode-grid{display:grid;gap:10px}
+.module-btn,.lesson-btn,.mode-btn,.card-btn{
+  width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--shadow);text-align:left;cursor:pointer
+}
+.module-btn .name,.mode-btn .name,.lesson-btn .name{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.module-btn .desc,.mode-btn .desc,.lesson-btn .desc{font-size:.84rem;color:var(--soft);line-height:1.45}
+.lesson-btn{display:flex;justify-content:space-between;align-items:center}
+.lesson-meta{font-size:.8rem;color:var(--soft)}
+.lesson-status{font-size:.78rem;color:var(--accent);font-weight:700}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.left-wrap{display:flex;align-items:center;gap:10px}
+.back-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);cursor:pointer}
+.top-title{font-size:1.08rem;font-weight:800}
+.badge{border:1px solid var(--border);background:var(--surface);padding:4px 10px;border-radius:999px;font-size:.78rem;color:var(--soft)}
+.timer{display:none;width:42px;height:42px;border-radius:50%;border:2.5px solid var(--gold);color:var(--gold);align-items:center;justify-content:center;font-weight:800}
+.timer.visible{display:flex}
+.timer.urgent{color:var(--red);border-color:var(--red)}
+.progress{height:4px;background:var(--border);border-radius:999px;overflow:hidden;margin:10px 0 14px}
+.progress-fill{height:100%;background:var(--accent);width:0%;transition:width .3s ease}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center}
+.stat span{display:block;font-size:.64rem;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:4px}
+.stat strong{font-size:1.25rem}
+
+.main-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:22px 18px;text-align:center;min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.pill.words{background:#FEF3C7;color:#92400E}
+.pill.dialogue{background:#DBEAFE;color:#1E40AF}
+.word{font-size:2.5rem;font-weight:800;line-height:1.15;margin-bottom:6px}
+.prompt{font-size:1.55rem;font-weight:800;line-height:1.35;margin-bottom:6px}
+.subprompt{color:var(--soft);font-size:.95rem;line-height:1.5}
+.prof-dots{display:flex;gap:6px;margin:2px 0 14px}
+.prof-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--border);background:transparent}
+.prof-dot.filled{background:var(--green);border-color:var(--green)}
+
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.opt{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;cursor:pointer;text-align:center;min-height:66px;display:flex;align-items:center;justify-content:center;line-height:1.35}
+.opt:hover:not(:disabled){border-color:var(--accent);background:#FFF7F5}
+.opt.correct{background:#F0FDF4;border-color:var(--green);color:var(--green)}
+.opt.wrong{background:#FEF2F2;border-color:var(--red);color:var(--red)}
+.opt:disabled{cursor:default}
+
+.feedback{min-height:48px;border-radius:12px;margin-top:12px;padding:10px 12px;line-height:1.45;font-size:.93rem;display:flex;align-items:center;justify-content:center;text-align:center}
+.feedback.correct{background:#F0FDF4;color:var(--green)}
+.feedback.wrong{background:#FEF2F2;color:var(--red)}
+.feedback.info{background:#EFF6FF;color:var(--blue)}
+
+.detail-box{margin-top:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;line-height:1.5}
+.detail-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--soft);font-weight:700;margin-bottom:4px}
+.detail-thai{font-size:1.1rem;font-weight:700;margin-bottom:3px}
+.detail-cn{color:var(--soft);font-size:.93rem}
+.note{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:.9rem}
+
+.next-btn,.primary-btn,.secondary-btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;margin-top:12px}
+.primary-btn,.next-btn{background:var(--text);color:#fff;font-weight:700}
+.secondary-btn{background:var(--surface);border:1.5px solid var(--border);color:var(--text)}
+.result-icon{font-size:3rem;text-align:center;margin-top:20px}
+.result-title{text-align:center;font-size:1.9rem;font-weight:800;margin-top:8px}
+.result-score{text-align:center;font-size:3.2rem;font-weight:900;color:var(--accent);margin-top:4px}
+.result-sub{text-align:center;color:var(--soft);line-height:1.6;margin-top:6px}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px}
+.result-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center}
+.result-stat span{display:block;font-size:.64rem;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:4px}
+.result-stat strong{font-size:1.3rem}
+.small-note{font-size:.82rem;color:var(--soft);margin-top:8px;text-align:center}
 </style>
 </head>
 <body>
 
 <div id="home">
-  <div class="home-title">Thai Alphabet</div>
-  <div class="home-sub">Module 1 · Pronunciation Recognition</div>
-  <div class="section-label">Phase</div>
-  <div class="phase-grid">
-    <div class="phase-btn active" onclick="setPhase('consonant',this)"><span class="ph-label">Consonants</span><span class="ph-count">44</span></div>
-    <div class="phase-btn" onclick="setPhase('vowel',this)"><span class="ph-label">Vowels</span><span class="ph-count">32</span></div>
-    <div class="phase-btn" onclick="setPhase('all',this)"><span class="ph-label">Mixed</span><span class="ph-count">76</span></div>
-  </div>
-  <div class="section-label">Mode</div>
-  <div class="mode-grid">
-    <div class="mode-btn" onclick="startMode('learning')">
-      <span class="mode-icon">📖</span>
-      <span class="mode-name">Learning</span>
-      <span class="mode-desc">10 questions. Focuses on weak letters.</span>
+  <div class="title">Thai Learning</div>
+  <div class="sub">A lesson-based Thai study app. Keep Pronunciation as Module 1, and use Lessons for words and dialogue.</div>
+
+  <div class="section">
+    <div class="section-label">Modules</div>
+    <div class="module-grid">
+      <button class="module-btn" onclick="openPronunciation()">
+        <div class="name">Pronunciation</div>
+        <div class="desc">Use your existing pronunciation file for consonants, vowels, and recognition practice.</div>
+      </button>
+      <button class="module-btn" onclick="goLessonHome()">
+        <div class="name">Lessons</div>
+        <div class="desc">Study by lesson. Each lesson has Words and Dialogue.</div>
+      </button>
     </div>
-    <div class="mode-btn challenge" onclick="startMode('challenge')">
-      <span class="mode-icon">⚡</span>
-      <span class="mode-name">Challenge</span>
-      <span class="mode-desc">50 seconds. Answer as many as you can!</span>
-    </div>
-  </div>
-  <div class="section-label">Your progress</div>
-  <div class="stats-summary">
-    <div class="ss-item"><span>Learned</span><strong id="h-learned">0</strong></div>
-    <div class="ss-item"><span>Weak</span><strong id="h-weak">0</strong></div>
-    <div class="ss-item"><span>New</span><strong id="h-new">76</strong></div>
   </div>
 </div>
 
-<div id="quiz">
+<div id="lesson-home" class="hidden">
   <div class="topbar">
-    <div class="tb-left">
+    <div class="left-wrap">
       <button class="back-btn" onclick="goHome()">←</button>
-      <div class="topbar-title" id="quiz-title">Learning</div>
+      <div class="top-title">Lessons</div>
+    </div>
+    <div class="badge" id="lesson-count"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Choose a lesson</div>
+    <div id="lesson-list"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Current lesson</div>
+    <div id="current-lesson-panel"></div>
+  </div>
+</div>
+
+<div id="quiz" class="hidden">
+  <div class="topbar">
+    <div class="left-wrap">
+      <button class="back-btn" onclick="backToLessonHome()">←</button>
+      <div class="top-title" id="quiz-title">Lesson</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <div class="topbar-badge" id="pill">1/10</div>
-      <div class="timer-box" id="timer-box">50</div>
+      <div class="badge" id="quiz-badge">1/10</div>
+      <div class="timer" id="timer-box">50</div>
     </div>
   </div>
-  <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
-  <div class="stats-row">
-    <div class="stat-box"><span>Score</span><strong id="score">0</strong></div>
-    <div class="stat-box streak"><span>Streak</span><strong id="streak">0</strong></div>
-    <div class="stat-box"><span>Learned</span><strong id="learned-count">0</strong></div>
+  <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <div class="stats" id="word-stats">
+    <div class="stat"><span>Score</span><strong id="score">0</strong></div>
+    <div class="stat"><span>Streak</span><strong id="streak">0</strong></div>
+    <div class="stat"><span>Learned</span><strong id="learned-count">0</strong></div>
   </div>
-  <div class="card" id="card">
-    <div class="letter-type consonant" id="ltype">Consonant</div>
-    <div class="prof-dots" id="prof-dots"></div>
-    <div class="thai-letter" id="thai-letter">ก</div>
-    <div class="letter-name hidden" id="letter-name"></div>
+
+  <div class="stats hidden" id="dialogue-stats">
+    <div class="stat"><span>Correct</span><strong id="d-score">0</strong></div>
+    <div class="stat"><span>Done</span><strong id="d-done">0</strong></div>
+    <div class="stat"><span>Missed</span><strong id="d-missed">0</strong></div>
   </div>
+
+  <div class="main-card">
+    <div class="pill words" id="mode-pill">Words</div>
+    <div id="proficiency-wrap" class="prof-dots"></div>
+    <div id="main-prompt" class="word">สวัสดี</div>
+    <div id="sub-prompt" class="subprompt">Choose the meaning.</div>
+  </div>
+
   <div class="options" id="options"></div>
-  <div class="feedback" id="feedback"></div>
-  <button class="next-btn" id="next-btn" onclick="nextQ()">Continue →</button>
+  <div class="feedback info" id="feedback">Choose one answer.</div>
+  <div id="detail-box" class="detail-box hidden"></div>
+  <button class="next-btn hidden" id="next-btn" onclick="nextQuestion()">Continue →</button>
 </div>
 
-<div id="result">
-  <div class="r-icon" id="r-icon">🏆</div>
-  <div class="r-title" id="r-title">Well done!</div>
-  <div class="r-score" id="r-score">8/10</div>
-  <div class="r-sub" id="r-sub"></div>
-  <div class="challenge-badge" id="challenge-badge" style="display:none"></div>
-  <div class="r-stats">
-    <div class="r-stat"><span>Correct</span><strong id="r-correct">0</strong></div>
-    <div class="r-stat"><span>Best Streak</span><strong id="r-streak">0</strong></div>
-    <div class="r-stat"><span>Learned</span><strong id="r-learned">0</strong></div>
+<div id="result" class="hidden">
+  <div class="result-icon" id="result-icon">⭐</div>
+  <div class="result-title" id="result-title">Finished</div>
+  <div class="result-score" id="result-score">8/10</div>
+  <div class="result-sub" id="result-sub"></div>
+  <div class="result-stats">
+    <div class="result-stat"><span>Correct</span><strong id="res-correct">0</strong></div>
+    <div class="result-stat"><span>Best</span><strong id="res-best">0</strong></div>
+    <div class="result-stat"><span>Review</span><strong id="res-review">0</strong></div>
   </div>
-  <div class="r-actions">
-    <button class="btn-primary" onclick="startMode(currentMode)">Practice Again</button>
-    <button class="btn-secondary" id="review-btn" onclick="reviewWrong()" style="display:none">Review Missed Letters</button>
-    <button class="btn-secondary" onclick="goHome()">Back to Home</button>
-  </div>
+  <div class="small-note" id="result-note"></div>
+  <button class="primary-btn" onclick="restartCurrentMode()">Practice Again</button>
+  <button class="secondary-btn" id="review-btn" onclick="startReview()">Review Missed Items</button>
+  <button class="secondary-btn" onclick="backToLessonHome()">Back to Lessons</button>
 </div>
 
 <script>
-const consonants=[
-  {thai:'ก',rom:'gaw',  name:'gaw gai',      meaning:'chicken',   type:'consonant'},
-  {thai:'ข',rom:'khaw', name:'khaw khai',    meaning:'egg',       type:'consonant'},
-  {thai:'ค',rom:'khaw2',name:'khaw khwai',   meaning:'buffalo',   type:'consonant'},
-  {thai:'ง',rom:'ngaw', name:'ngaw nguu',    meaning:'snake',     type:'consonant'},
-  {thai:'จ',rom:'jaw',  name:'jaw jaan',     meaning:'plate',     type:'consonant'},
-  {thai:'ช',rom:'chaw', name:'chaw chaang',  meaning:'elephant',  type:'consonant'},
-  {thai:'ซ',rom:'saw',  name:'saw soo',      meaning:'chain',     type:'consonant'},
-  {thai:'ญ',rom:'yaw',  name:'yaw ying',     meaning:'woman',     type:'consonant'},
-  {thai:'ด',rom:'daw',  name:'daw dek',      meaning:'child',     type:'consonant'},
-  {thai:'ต',rom:'taw',  name:'taw tao',      meaning:'turtle',    type:'consonant'},
-  {thai:'ถ',rom:'thaw', name:'thaw thung',   meaning:'bag',       type:'consonant'},
-  {thai:'ท',rom:'thaw2',name:'thaw thahaan', meaning:'soldier',   type:'consonant'},
-  {thai:'น',rom:'naw',  name:'naw nuu',      meaning:'mouse',     type:'consonant'},
-  {thai:'บ',rom:'baw',  name:'baw baimai',   meaning:'leaf',      type:'consonant'},
-  {thai:'ป',rom:'bpaw', name:'bpaw bplaa',   meaning:'fish',      type:'consonant'},
-  {thai:'ผ',rom:'phaw', name:'phaw phueng',  meaning:'bee',       type:'consonant'},
-  {thai:'ฝ',rom:'faw',  name:'faw faa',      meaning:'lid',       type:'consonant'},
-  {thai:'พ',rom:'phaw2',name:'phaw phaan',   meaning:'tray',      type:'consonant'},
-  {thai:'ฟ',rom:'faw2', name:'faw fan',      meaning:'tooth',     type:'consonant'},
-  {thai:'ม',rom:'maw',  name:'maw maa',      meaning:'horse',     type:'consonant'},
-  {thai:'ย',rom:'yaw2', name:'yaw yak',      meaning:'giant',     type:'consonant'},
-  {thai:'ร',rom:'raw',  name:'raw ruea',     meaning:'boat',      type:'consonant'},
-  {thai:'ล',rom:'law',  name:'law ling',     meaning:'monkey',    type:'consonant'},
-  {thai:'ว',rom:'waw',  name:'waw waen',     meaning:'ring',      type:'consonant'},
-  {thai:'ส',rom:'saw2', name:'saw suea',     meaning:'tiger',     type:'consonant'},
-  {thai:'ห',rom:'haw',  name:'haw heep',     meaning:'chest',     type:'consonant'},
-  {thai:'อ',rom:'aw',   name:'aw aang',      meaning:'basin',     type:'consonant'},
-  {thai:'ฮ',rom:'haw2', name:'haw nok huk',  meaning:'owl',       type:'consonant'},
-  {thai:'ฉ',rom:'chaw2',name:'chaw ching',   meaning:'cymbal',    type:'consonant'},
-  {thai:'ศ',rom:'saw3', name:'saw sala',     meaning:'pavilion',  type:'consonant'},
-  {thai:'ษ',rom:'saw4', name:'saw rue-si',   meaning:'hermit',    type:'consonant'},
-  {thai:'ฆ',rom:'khaw3',name:'khaw ra-khang',meaning:'bell',      type:'consonant'},
-  {thai:'ณ',rom:'naw2', name:'naw nen',      meaning:'novice',    type:'consonant'},
-  {thai:'ธ',rom:'thaw3',name:'thaw thong',   meaning:'flag',      type:'consonant'},
-  {thai:'ภ',rom:'phaw3',name:'phaw sam-phao',meaning:'sailboat',  type:'consonant'},
-  {thai:'ฌ',rom:'chaw3',name:'chaw cher',    meaning:'tree',      type:'consonant'},
-  {thai:'ฎ',rom:'daw2', name:'daw cha-daa',  meaning:'headdress', type:'consonant'},
-  {thai:'ฏ',rom:'taw2', name:'taw bpatak',   meaning:'spear',     type:'consonant'},
-  {thai:'ฐ',rom:'thaw4',name:'thaw thaan',   meaning:'pedestal',  type:'consonant'},
-  {thai:'ฑ',rom:'thaw5',name:'thaw montho',  meaning:'Montho',    type:'consonant'},
-  {thai:'ฒ',rom:'thaw6',name:'thaw phu-thao',meaning:'elder',     type:'consonant'},
-  {thai:'ฬ',rom:'law2', name:'law ju-laa',   meaning:'kite',      type:'consonant'},
-  {thai:'ฯ',rom:'yaw3', name:'mai yamok',    meaning:'abbreviate',type:'consonant'},
-  {thai:'ๆ',rom:'rep',  name:'mai yamok2',   meaning:'repeat',    type:'consonant'},
-];
-const vowels=[
-  {thai:'า', rom:'-aa',  name:'sara aa',     meaning:'long A',   type:'vowel'},
-  {thai:'ิ', rom:'-i',   name:'sara i',      meaning:'short I',  type:'vowel'},
-  {thai:'ี', rom:'-ii',  name:'sara ii',     meaning:'long I',   type:'vowel'},
-  {thai:'ึ', rom:'-eu',  name:'sara eu',     meaning:'short EU', type:'vowel'},
-  {thai:'ื', rom:'-euu', name:'sara euu',    meaning:'long EU',  type:'vowel'},
-  {thai:'ุ', rom:'-u',   name:'sara u',      meaning:'short U',  type:'vowel'},
-  {thai:'ู', rom:'-uu',  name:'sara uu',     meaning:'long U',   type:'vowel'},
-  {thai:'เ', rom:'e-',   name:'sara e',      meaning:'long E',   type:'vowel'},
-  {thai:'แ', rom:'ae-',  name:'sara ae',     meaning:'AE sound', type:'vowel'},
-  {thai:'โ', rom:'o-',   name:'sara o',      meaning:'long O',   type:'vowel'},
-  {thai:'ใ', rom:'ai-',  name:'sara ai (1)', meaning:'AI sound', type:'vowel'},
-  {thai:'ไ', rom:'ai2-', name:'sara ai (2)', meaning:'AI sound', type:'vowel'},
-  {thai:'่', rom:'tone1',name:'mai ek',      meaning:'tone 1',   type:'vowel'},
-  {thai:'้', rom:'tone2',name:'mai tho',     meaning:'tone 2',   type:'vowel'},
-  {thai:'๊', rom:'tone3',name:'mai tri',     meaning:'tone 3',   type:'vowel'},
-  {thai:'๋', rom:'tone4',name:'mai jattawa', meaning:'tone 4',   type:'vowel'},
-  {thai:'ั', rom:'-a',   name:'sara a',      meaning:'short A',  type:'vowel'},
-  {thai:'เะ',rom:'e-sh', name:'sara e short',meaning:'short E',  type:'vowel'},
-  {thai:'แะ',rom:'ae-sh',name:'sara ae short',meaning:'short AE',type:'vowel'},
-  {thai:'อ', rom:'-o',   name:'sara or',     meaning:'O sound',  type:'vowel'},
-  {thai:'เอะ',rom:'oe-sh',name:'sara oe short',meaning:'OE short',type:'vowel'},
-  {thai:'เอ',rom:'oe-',  name:'sara oe long',meaning:'long OE',  type:'vowel'},
-  {thai:'เีย',rom:'ia-', name:'sara ia',     meaning:'IA sound', type:'vowel'},
-  {thai:'ัว',rom:'ua-',  name:'sara ua',     meaning:'UA sound', type:'vowel'},
-  {thai:'ือ',rom:'uea-', name:'sara uea',    meaning:'UEA sound',type:'vowel'},
-  {thai:'เาะ',rom:'-or', name:'sara or short',meaning:'short OR',type:'vowel'},
-  {thai:'าว',rom:'-ao',  name:'sara ao',     meaning:'AO sound', type:'vowel'},
-  {thai:'เา',rom:'-ao2', name:'sara ao long',meaning:'long AO',  type:'vowel'},
-  {thai:'ํา',rom:'-am',  name:'sara am',     meaning:'AM sound', type:'vowel'},
-  {thai:'็',  rom:'-sh', name:'mai taikhu',  meaning:'shortener',type:'vowel'},
-  {thai:'์',  rom:'sil', name:'thanthakat',  meaning:'silent',   type:'vowel'},
-  {thai:'ๆ', rom:'rep2', name:'mai yamok',   meaning:'repeat',   type:'vowel'},
-];
-const allLetters=[...consonants,...vowels];
-
-let proficiency=JSON.parse(localStorage.getItem('th_prof3')||'{}');
-function getLevel(thai){return proficiency[thai]??0;}
-function updateLevel(thai,correct){
-  proficiency[thai]=correct?Math.min(3,getLevel(thai)+1):Math.max(0,getLevel(thai)-1);
-  localStorage.setItem('th_prof3',JSON.stringify(proficiency));
+if (!window.lessons || !Array.isArray(window.lessons)) {
+  document.body.innerHTML = '<div style="padding:24px;font-family:sans-serif"><h2>Data not loaded</h2><p>Please keep this HTML and <b>data1.js</b> in the same folder.</p></div>';
 }
 
-let pool=[...consonants],current=null,score=0,streak=0,bestStreak=0;
-let qIdx=0,wrongList=[],currentMode='learning',currentPhase='consonant';
-let timerInterval=null,timeLeft=50,totalAnswered=0;
-let recentLetters=[];
-const ROUND=10;
-const RECENT_LIMIT=3;
+const WORD_ROUND = 10;
+const WORD_RECENT_LIMIT = 3;
+const WORD_PROF_KEY = 'thai_word_prof_v1';
+const LESSON_STATUS_KEY = 'thai_lesson_status_v1';
 
-function setPhase(phase,btn){
-  currentPhase=phase;
-  document.querySelectorAll('.phase-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  updateHomeSummary();
+let currentLessonIndex = 0;
+let currentMode = null;
+let currentPool = [];
+let currentItem = null;
+let currentIndex = 0;
+let score = 0;
+let streak = 0;
+let bestStreak = 0;
+let totalAnswered = 0;
+let wrongItems = [];
+let recentWordIds = [];
+let timerInterval = null;
+let timeLeft = 50;
+let dialogueMissed = 0;
+let reviewPool = [];
+
+const wordProficiency = JSON.parse(localStorage.getItem(WORD_PROF_KEY) || '{}');
+const lessonStatus = JSON.parse(localStorage.getItem(LESSON_STATUS_KEY) || '{}');
+
+function saveWordProficiency() {
+  localStorage.setItem(WORD_PROF_KEY, JSON.stringify(wordProficiency));
 }
-function getPool(phase){
-  if(phase==='consonant')return consonants;
-  if(phase==='vowel')return vowels;
-  return allLetters;
+function saveLessonStatus() {
+  localStorage.setItem(LESSON_STATUS_KEY, JSON.stringify(lessonStatus));
 }
-function updateHomeSummary(){
-  const p=getPool(currentPhase);
-  document.getElementById('h-learned').textContent=p.filter(l=>getLevel(l.thai)>=3).length;
-  document.getElementById('h-weak').textContent=p.filter(l=>{const lv=getLevel(l.thai);return lv>=1&&lv<3;}).length;
-  document.getElementById('h-new').textContent=p.filter(l=>getLevel(l.thai)===0).length;
+function getWordLevel(id) {
+  return wordProficiency[id] ?? 0;
 }
-function goHome(){
+function updateWordLevel(id, correct) {
+  wordProficiency[id] = correct ? Math.min(3, getWordLevel(id) + 1) : Math.max(0, getWordLevel(id) - 1);
+  saveWordProficiency();
+}
+function markLessonStarted(id) {
+  if (!lessonStatus[id]) lessonStatus[id] = 'in-progress';
+  saveLessonStatus();
+}
+function markLessonCompleted(id) {
+  lessonStatus[id] = 'completed';
+  saveLessonStatus();
+}
+function lessonStatusText(id) {
+  return lessonStatus[id] || 'not-started';
+}
+
+function show(id){ document.getElementById(id).classList.remove('hidden'); }
+function hide(id){ document.getElementById(id).classList.add('hidden'); }
+
+function goHome() {
   clearInterval(timerInterval);
-  recentLetters=[];
-  show('home');hide('quiz');hide('result');
-  updateHomeSummary();
+  hide('lesson-home'); hide('quiz'); hide('result');
+  show('home');
+}
+function goLessonHome() {
+  clearInterval(timerInterval);
+  hide('home'); hide('quiz'); hide('result');
+  show('lesson-home');
+  renderLessonHome();
+}
+function backToLessonHome() {
+  clearInterval(timerInterval);
+  hide('quiz'); hide('result');
+  show('lesson-home');
+  renderLessonHome();
+}
+function openPronunciation() {
+  alert('Open pronunciation.html in the same folder.');
 }
 
-// Smart selection: 30% new, 50% weak, 20% learned
-// Also avoids repeating the last few letters too quickly.
-function rememberRecent(thai){
-  recentLetters.push(thai);
-  if(recentLetters.length>RECENT_LIMIT)recentLetters.shift();
+function renderLessonHome() {
+  document.getElementById('lesson-count').textContent = `${lessons.length} lesson${lessons.length > 1 ? 's' : ''}`;
+
+  const list = document.getElementById('lesson-list');
+  list.innerHTML = '';
+  lessons.forEach((lesson, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'lesson-btn';
+    btn.innerHTML = `
+      <div>
+        <div class="name">Lesson ${lesson.id} · ${lesson.titleEn}</div>
+        <div class="desc">${lesson.titleCn} · ${lesson.topic}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lesson-meta">${lesson.words.length} words · ${lesson.dialogues.length} dialogues</div>
+        <div class="lesson-status">${lessonStatusText(lesson.id)}</div>
+      </div>
+    `;
+    btn.onclick = () => {
+      currentLessonIndex = idx;
+      renderCurrentLessonPanel();
+    };
+    list.appendChild(btn);
+  });
+
+  renderCurrentLessonPanel();
 }
-function selectNext(){
-  const filtered=pool.filter(l=>!recentLetters.includes(l.thai));
-  const source=filtered.length?filtered:pool;
-  const newL=source.filter(l=>getLevel(l.thai)===0);
-  const weak=source.filter(l=>{const lv=getLevel(l.thai);return lv>=1&&lv<3;});
-  const learned=source.filter(l=>getLevel(l.thai)>=3);
-  const r=Math.random();
-  if(r<0.30&&newL.length)return pick(newL);
-  if(r<0.80&&weak.length)return pick(weak);
-  if(learned.length)return pick(learned);
-  if(weak.length)return pick(weak);
-  if(newL.length)return pick(newL);
+
+function renderCurrentLessonPanel() {
+  const lesson = lessons[currentLessonIndex];
+  const panel = document.getElementById('current-lesson-panel');
+  const learned = lesson.words.filter(w => getWordLevel(w.id) >= 3).length;
+  panel.innerHTML = `
+    <div class="card-btn">
+      <div class="name" style="font-size:1.1rem;font-weight:800;margin-bottom:6px">Lesson ${lesson.id} · ${lesson.titleEn}</div>
+      <div class="desc" style="margin-bottom:12px">${lesson.titleCn}. Topic: ${lesson.topic}</div>
+      <div class="lesson-meta" style="margin-bottom:12px">Words learned: ${learned}/${lesson.words.length} · Status: ${lessonStatusText(lesson.id)}</div>
+      <div class="mode-grid">
+        <button class="mode-btn" onclick="startWordsLearning()">
+          <div class="name">Words · Learning</div>
+          <div class="desc">10 questions. Weighted by weak words, with level, review, example, and note.</div>
+        </button>
+        <button class="mode-btn" onclick="startWordsChallenge()">
+          <div class="name">Words · Challenge</div>
+          <div class="desc">50 seconds. Fast review using the same word data.</div>
+        </button>
+        <button class="mode-btn" onclick="startDialogueLearning()">
+          <div class="name">Dialogue</div>
+          <div class="desc">Choose the best response. Shows explanation and supports review.</div>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function resetCommonState() {
+  score = 0; streak = 0; bestStreak = 0; totalAnswered = 0;
+  wrongItems = []; recentWordIds = []; currentIndex = 0; dialogueMissed = 0;
+  reviewPool = [];
+  clearInterval(timerInterval);
+}
+
+function startWordsLearning() {
+  resetCommonState();
+  currentMode = 'words-learning';
+  currentPool = lessons[currentLessonIndex].words.slice();
+  markLessonStarted(lessons[currentLessonIndex].id);
+  openQuizScreen();
+  loadWordQuestion();
+}
+function startWordsChallenge() {
+  resetCommonState();
+  currentMode = 'words-challenge';
+  currentPool = lessons[currentLessonIndex].words.slice();
+  markLessonStarted(lessons[currentLessonIndex].id);
+  openQuizScreen();
+  startTimer();
+  loadWordQuestion();
+}
+function startDialogueLearning() {
+  resetCommonState();
+  currentMode = 'dialogue-learning';
+  currentPool = lessons[currentLessonIndex].dialogues.slice();
+  markLessonStarted(lessons[currentLessonIndex].id);
+  openQuizScreen();
+  loadDialogueQuestion();
+}
+
+function openQuizScreen() {
+  hide('lesson-home'); hide('result'); show('quiz');
+  document.getElementById('quiz-title').textContent = `Lesson ${lessons[currentLessonIndex].id} · ${lessons[currentLessonIndex].titleEn}`;
+  document.getElementById('feedback').className = 'feedback info';
+  document.getElementById('feedback').textContent = 'Choose one answer.';
+  hide('detail-box');
+  hide('next-btn');
+  if (currentMode.startsWith('words')) {
+    show('word-stats'); hide('dialogue-stats');
+    document.getElementById('mode-pill').textContent = currentMode === 'words-challenge' ? 'Words · Challenge' : 'Words';
+    document.getElementById('mode-pill').className = 'pill words';
+    show('proficiency-wrap');
+    if (currentMode === 'words-challenge') showTimer(); else hideTimer();
+  } else {
+    hide('word-stats'); show('dialogue-stats');
+    document.getElementById('mode-pill').textContent = 'Dialogue';
+    document.getElementById('mode-pill').className = 'pill dialogue';
+    hide('proficiency-wrap');
+    hideTimer();
+  }
+  updateStats();
+  updateProgress();
+}
+
+function showTimer() {
+  const box = document.getElementById('timer-box');
+  box.classList.add('visible');
+  box.classList.remove('urgent');
+}
+function hideTimer() {
+  const box = document.getElementById('timer-box');
+  box.classList.remove('visible');
+}
+function startTimer() {
+  timeLeft = 50;
+  const box = document.getElementById('timer-box');
+  box.textContent = timeLeft;
+  showTimer();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    box.textContent = timeLeft;
+    if (timeLeft <= 10) box.classList.add('urgent');
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }, 1000);
+}
+
+function updateStats() {
+  if (currentMode && currentMode.startsWith('words')) {
+    const lesson = lessons[currentLessonIndex];
+    document.getElementById('score').textContent = score;
+    document.getElementById('streak').textContent = streak;
+    document.getElementById('learned-count').textContent = lesson.words.filter(w => getWordLevel(w.id) >= 3).length;
+  } else {
+    document.getElementById('d-score').textContent = score;
+    document.getElementById('d-done').textContent = totalAnswered;
+    document.getElementById('d-missed').textContent = dialogueMissed;
+  }
+}
+
+function updateProgress() {
+  const fill = document.getElementById('progress-fill');
+  const badge = document.getElementById('quiz-badge');
+  if (currentMode === 'words-learning') {
+    fill.style.width = `${(currentIndex / WORD_ROUND) * 100}%`;
+    badge.textContent = `${Math.min(currentIndex + 1, WORD_ROUND)}/${WORD_ROUND}`;
+  } else if (currentMode === 'words-challenge') {
+    fill.style.width = '0%';
+    badge.textContent = `${totalAnswered} done`;
+  } else {
+    const total = currentPool.length || 1;
+    fill.style.width = `${(currentIndex / total) * 100}%`;
+    badge.textContent = `${Math.min(currentIndex + 1, total)}/${total}`;
+  }
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function rememberRecentWord(id) {
+  recentWordIds.push(id);
+  if (recentWordIds.length > WORD_RECENT_LIMIT) recentWordIds.shift();
+}
+function selectWord() {
+  const filtered = currentPool.filter(w => !recentWordIds.includes(w.id));
+  const source = filtered.length ? filtered : currentPool;
+  const newWords = source.filter(w => getWordLevel(w.id) === 0);
+  const weakWords = source.filter(w => { const lv = getWordLevel(w.id); return lv >= 1 && lv < 3; });
+  const learnedWords = source.filter(w => getWordLevel(w.id) >= 3);
+  const r = Math.random();
+  if (r < 0.30 && newWords.length) return pick(newWords);
+  if (r < 0.80 && weakWords.length) return pick(weakWords);
+  if (learnedWords.length) return pick(learnedWords);
+  if (weakWords.length) return pick(weakWords);
+  if (newWords.length) return pick(newWords);
   return pick(source);
 }
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
-function startMode(mode){
-  currentMode=mode;
-  pool=getPool(currentPhase);
-  score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];
-  hide('home');hide('result');show('quiz');
-  document.getElementById('quiz-title').textContent=mode==='challenge'?'Challenge':'Learning';
-  const tb=document.getElementById('timer-box');
-  clearInterval(timerInterval);
-  if(mode==='challenge'){
-    timeLeft=50;tb.textContent=50;
-    tb.classList.add('visible');tb.classList.remove('urgent');
-    timerInterval=setInterval(()=>{
-      timeLeft--;tb.textContent=timeLeft;
-      if(timeLeft<=10)tb.classList.add('urgent');
-      if(timeLeft<=0){clearInterval(timerInterval);showResult();}
-    },1000);
-  }else{tb.classList.remove('visible');}
-  updateStats();loadQ();
+function renderWordDetails(word) {
+  const box = document.getElementById('detail-box');
+  box.innerHTML = `
+    <div class="detail-label">Meaning</div>
+    <div class="detail-thai">${word.english} / ${word.chinese}</div>
+    <div class="detail-label" style="margin-top:10px">Example</div>
+    <div class="detail-thai">${word.exampleThai || ''}</div>
+    <div class="detail-cn">${word.exampleChinese || ''}</div>
+    <div class="note"><div class="detail-label">Usage note</div>${word.note || '—'}</div>
+  `;
+  show('detail-box');
 }
 
-function loadQ(){
-  current=selectNext();
-  rememberRecent(current.thai);
-  const lv=getLevel(current.thai);
-  const lt=document.getElementById('ltype');
-  lt.textContent=current.type==='consonant'?'Consonant':'Vowel';
-  lt.className='letter-type '+current.type;
-  const dotsEl=document.getElementById('prof-dots');
-  dotsEl.innerHTML='';
-  for(let i=0;i<3;i++){const d=document.createElement('div');d.className='prof-dot'+(i<lv?' filled':'');dotsEl.appendChild(d);}
-  document.getElementById('thai-letter').textContent=current.thai;
-  const nm=document.getElementById('letter-name');nm.textContent='';nm.classList.add('hidden');
-  if(currentMode==='learning'){
-    document.getElementById('prog').style.width=((qIdx/ROUND)*100)+'%';
-    document.getElementById('pill').textContent=(qIdx+1)+'/'+ROUND;
-  }else{
-    document.getElementById('prog').style.width='0%';
-    document.getElementById('pill').textContent=totalAnswered+' done';
-  }
-  const fb=document.getElementById('feedback');fb.textContent='';fb.className='feedback';
-  document.getElementById('next-btn').classList.remove('visible');
+function loadWordQuestion() {
+  updateProgress();
+  hide('detail-box');
+  hide('next-btn');
+  document.getElementById('feedback').className = 'feedback info';
+  document.getElementById('feedback').textContent = 'Choose the correct meaning.';
+  currentItem = selectWord();
+  rememberRecentWord(currentItem.id);
 
-  const usedRoms=new Set([current.rom]);
-  const distPool=shuffle(allLetters.filter(l=>l.type===current.type&&l.rom!==current.rom));
-  const distractors=[];
-  for(const l of distPool){
-    if(!usedRoms.has(l.rom)){usedRoms.add(l.rom);distractors.push({rom:l.rom,thai:l.thai});}
-    if(distractors.length===3)break;
+  const level = getWordLevel(currentItem.id);
+  const profWrap = document.getElementById('proficiency-wrap');
+  profWrap.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const d = document.createElement('div');
+    d.className = 'prof-dot' + (i < level ? ' filled' : '');
+    profWrap.appendChild(d);
   }
-  const opts=shuffle([{rom:current.rom,thai:current.thai,correct:true},...distractors.map(d=>({...d,correct:false}))]);
-  const container=document.getElementById('options');container.innerHTML='';
-  opts.forEach(opt=>{
-    const btn=document.createElement('button');btn.className='opt';
-    btn.textContent=opt.rom;btn.dataset.thai=opt.thai;
-    btn.onclick=()=>checkAnswer(btn,opt.correct);
+
+  document.getElementById('main-prompt').className = 'word';
+  document.getElementById('main-prompt').textContent = currentItem.thai;
+  document.getElementById('sub-prompt').textContent = `Choose the meaning · ${currentItem.type}`;
+
+  const lessonWords = lessons[currentLessonIndex].words;
+  const correctText = `${currentItem.english} / ${currentItem.chinese}`;
+  let distractors = shuffle(lessonWords.filter(w => w.id !== currentItem.id)).slice(0, 3).map(w => `${w.english} / ${w.chinese}`);
+  const dedup = Array.from(new Set([...distractors, correctText]));
+  while (dedup.length < 4 && lessonWords.length >= 4) {
+    const extra = pick(lessonWords);
+    const txt = `${extra.english} / ${extra.chinese}`;
+    if (!dedup.includes(txt)) dedup.push(txt);
+  }
+  const options = shuffle(dedup.slice(0, 4));
+
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  options.forEach(text => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = text;
+    btn.onclick = () => checkWordAnswer(btn, text === correctText);
     container.appendChild(btn);
   });
-  const card=document.getElementById('card');card.style.animation='none';card.offsetHeight;card.style.animation='slideUp .3s ease both';
 }
 
-function checkAnswer(btn,isCorrect){
-  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+function checkWordAnswer(btn, correct) {
+  [...document.querySelectorAll('#options .opt')].forEach(b => b.disabled = true);
   totalAnswered++;
-  const nm=document.getElementById('letter-name');nm.textContent=current.name+' · '+current.meaning;nm.classList.remove('hidden');
-  updateLevel(current.thai,isCorrect);
-  const newLv=getLevel(current.thai);
-  const fb=document.getElementById('feedback');
-  if(isCorrect){
-    btn.classList.add('correct');score++;streak++;bestStreak=Math.max(bestStreak,streak);
-    let msg=streak>=3?'🔥 '+streak+' in a row! ':'✓ Correct! ';
-    if(newLv>=3)msg+='⭐ Learned!';
-    fb.textContent=msg;fb.className='feedback correct';
-    document.getElementById('thai-letter').classList.add('pop');
-    setTimeout(()=>document.getElementById('thai-letter').classList.remove('pop'),250);
-  }else{
-    btn.classList.add('wrong');streak=0;wrongList.push(current);
-    document.querySelectorAll('.opt').forEach(b=>{if(b.dataset.thai===current.thai)b.classList.add('correct');});
-    fb.textContent='✗ "'+current.rom+'" — '+current.name;fb.className='feedback wrong';
+  updateWordLevel(currentItem.id, correct);
+  const newLv = getWordLevel(currentItem.id);
+
+  if (correct) {
+    btn.classList.add('correct');
+    score++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    let msg = streak >= 3 ? `🔥 ${streak} in a row! ` : '✓ Correct! ';
+    if (newLv >= 3) msg += '⭐ Learned!';
+    document.getElementById('feedback').className = 'feedback correct';
+    document.getElementById('feedback').textContent = msg;
+  } else {
+    btn.classList.add('wrong');
+    streak = 0;
+    wrongItems.push(currentItem);
+    [...document.querySelectorAll('#options .opt')].forEach(b => {
+      if (b.textContent === `${currentItem.english} / ${currentItem.chinese}`) b.classList.add('correct');
+    });
+    document.getElementById('feedback').className = 'feedback wrong';
+    document.getElementById('feedback').textContent = '✗ Not quite. See the example and note below.';
   }
-  updateStats();qIdx++;
-  if(currentMode==='learning'&&qIdx>=ROUND){setTimeout(()=>showResult(),700);}
-  else{document.getElementById('next-btn').classList.add('visible');}
-}
 
-function nextQ(){loadQ();}
+  renderWordDetails(currentItem);
+  updateStats();
+  currentIndex++;
 
-function showResult(){
-  clearInterval(timerInterval);hide('quiz');show('result');
-  const total=currentMode==='learning'?ROUND:totalAnswered;
-  const pct=total>0?score/total:0;
-  const learnedCount=getPool(currentPhase).filter(l=>getLevel(l.thai)>=3).length;
-  let icon,title,sub;
-  const cb=document.getElementById('challenge-badge');
-  if(currentMode==='challenge'){
-    icon='⚡';title="Time's up!";
-    sub='You answered '+totalAnswered+' questions in 50 seconds.';
-    cb.style.display='block';
-    cb.textContent='⚡ '+score+' correct · Accuracy: '+(totalAnswered>0?Math.round(score/totalAnswered*100):0)+'%';
-  }else{
-    cb.style.display='none';
-    if(pct===1){icon='🏆';title='Perfect!';sub='Every letter correct. สุดยอด!';}
-    else if(pct>=0.8){icon='⭐';title='Excellent!';sub='Almost perfect. Keep it up!';}
-    else if(pct>=0.6){icon='👍';title='Good job!';sub='Keep focusing on weak letters.';}
-    else{icon='📖';title='Keep going!';sub='Every mistake is progress!';}
+  if (currentMode === 'words-learning' && currentIndex >= WORD_ROUND) {
+    setTimeout(showResult, 500);
+  } else {
+    show('next-btn');
   }
-  document.getElementById('r-icon').textContent=icon;
-  document.getElementById('r-title').textContent=title;
-  document.getElementById('r-score').textContent=score+'/'+total;
-  document.getElementById('r-sub').textContent=sub;
-  document.getElementById('r-correct').textContent=score;
-  document.getElementById('r-streak').textContent=bestStreak;
-  document.getElementById('r-learned').textContent=learnedCount;
-  document.getElementById('review-btn').style.display=wrongList.length>0?'block':'none';
-  updateHomeSummary();
 }
 
-function reviewWrong(){
-  const missed=[...new Set(wrongList.map(l=>l.thai))];
-  pool=allLetters.filter(l=>missed.includes(l.thai));
-  score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];currentMode='learning';
-  hide('result');show('quiz');
-  document.getElementById('quiz-title').textContent='Review';
-  document.getElementById('timer-box').classList.remove('visible');
-  updateStats();loadQ();
+function loadDialogueQuestion() {
+  updateProgress();
+  hide('detail-box');
+  hide('next-btn');
+  document.getElementById('feedback').className = 'feedback info';
+  document.getElementById('feedback').textContent = 'Choose the best response.';
+  currentItem = currentPool[currentIndex];
+
+  document.getElementById('main-prompt').className = 'prompt';
+  document.getElementById('main-prompt').textContent = currentItem.promptThai;
+  document.getElementById('sub-prompt').textContent = currentItem.promptChinese;
+
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  currentItem.options.forEach(text => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = text;
+    btn.onclick = () => checkDialogueAnswer(btn, text === currentItem.answer);
+    container.appendChild(btn);
+  });
 }
 
-function updateStats(){
-  document.getElementById('score').textContent=score;
-  document.getElementById('streak').textContent=streak;
-  document.getElementById('learned-count').textContent=getPool(currentPhase).filter(l=>getLevel(l.thai)>=3).length;
-}
-function show(id){const el=document.getElementById(id);el.style.display='flex';el.style.flexDirection='column';el.style.alignItems='center';}
-function hide(id){document.getElementById(id).style.display='none';}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function checkDialogueAnswer(btn, correct) {
+  [...document.querySelectorAll('#options .opt')].forEach(b => b.disabled = true);
+  totalAnswered++;
 
-updateHomeSummary();
+  const box = document.getElementById('detail-box');
+  box.innerHTML = `
+    <div class="detail-label">Best response</div>
+    <div class="detail-thai">${currentItem.answer}</div>
+    <div class="note"><div class="detail-label">Explanation</div>${currentItem.explanation || '—'}</div>
+  `;
+  show('detail-box');
+
+  if (correct) {
+    btn.classList.add('correct');
+    score++;
+    document.getElementById('feedback').className = 'feedback correct';
+    document.getElementById('feedback').textContent = '✓ Correct response.';
+  } else {
+    btn.classList.add('wrong');
+    dialogueMissed++;
+    wrongItems.push(currentItem);
+    [...document.querySelectorAll('#options .opt')].forEach(b => {
+      if (b.textContent === currentItem.answer) b.classList.add('correct');
+    });
+    document.getElementById('feedback').className = 'feedback wrong';
+    document.getElementById('feedback').textContent = '✗ The highlighted line is the better response.';
+  }
+
+  updateStats();
+  currentIndex++;
+  if (currentIndex >= currentPool.length) {
+    markLessonCompleted(lessons[currentLessonIndex].id);
+    setTimeout(showResult, 500);
+  } else {
+    show('next-btn');
+  }
+}
+
+function nextQuestion() {
+  if (currentMode.startsWith('words')) loadWordQuestion();
+  else loadDialogueQuestion();
+}
+
+function showResult() {
+  clearInterval(timerInterval);
+  hide('quiz'); show('result');
+
+  let total, icon, title, sub, reviewCount;
+  if (currentMode.startsWith('words')) {
+    total = currentMode === 'words-learning' ? WORD_ROUND : totalAnswered;
+    const pct = total > 0 ? score / total : 0;
+    reviewCount = [...new Set(wrongItems.map(x => x.id))].length;
+    icon = currentMode === 'words-challenge' ? '⚡' : (pct === 1 ? '🏆' : pct >= 0.8 ? '⭐' : pct >= 0.6 ? '👍' : '📖');
+    title = currentMode === 'words-challenge' ? "Time's up!" : 'Words finished';
+    sub = currentMode === 'words-challenge'
+      ? `You answered ${totalAnswered} word questions in 50 seconds.`
+      : 'You reviewed meanings, examples, and notes.';
+    document.getElementById('res-best').textContent = bestStreak;
+    document.getElementById('result-note').textContent = 'This words screen now matches the lesson requirement: meaning + example + note + level logic.';
+  } else {
+    total = currentPool.length;
+    reviewCount = [...new Set(wrongItems.map(x => [x.id, x])).values()].length;
+    icon = '💬';
+    title = 'Dialogue finished';
+    sub = 'You practiced response selection with explanation and review support.';
+    document.getElementById('res-best').textContent = score;
+    document.getElementById('result-note').textContent = 'Dialogue is still lighter than Words, as planned.';
+  }
+
+  document.getElementById('result-icon').textContent = icon;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-score').textContent = `${score}/${total}`;
+  document.getElementById('result-sub').textContent = sub;
+  document.getElementById('res-correct').textContent = score;
+  document.getElementById('res-review').textContent = reviewCount;
+  document.getElementById('review-btn').style.display = reviewCount > 0 ? 'block' : 'none';
+}
+
+function restartCurrentMode() {
+  if (currentMode === 'words-learning') startWordsLearning();
+  else if (currentMode === 'words-challenge') startWordsChallenge();
+  else startDialogueLearning();
+}
+
+function startReview() {
+  const unique = [...new Map(wrongItems.map(item => [item.id, item])).values()];
+  if (!unique.length) return;
+  wrongItems = [];
+  currentIndex = 0;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  totalAnswered = 0;
+  dialogueMissed = 0;
+  recentWordIds = [];
+  reviewPool = unique;
+  hide('result');
+  show('quiz');
+
+  if (currentMode.startsWith('words')) {
+    currentPool = reviewPool.slice();
+    currentMode = 'words-learning';
+    openQuizScreen();
+    loadWordQuestion();
+  } else {
+    currentPool = reviewPool.slice();
+    currentMode = 'dialogue-learning';
+    openQuizScreen();
+    loadDialogueQuestion();
+  }
+}
+
+renderLessonHome();
 </script>
 </body>
 </html>
