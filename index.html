@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Thai Alphabet</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F4EF;--surface:#FFFFFF;--border:#E8E2D9;--text:#1C1917;--soft:#78716C;--accent:#C2410C;--green:#15803D;--red:#DC2626;--gold:#D97706;--radius:16px;--shadow:0 2px 16px rgba(0,0,0,0.07);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;width:100%;}
+#home{display:flex;flex-direction:column;align-items:center;padding:48px 20px 40px;min-height:100vh;}
+.home-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;text-align:center;}
+.home-sub{font-size:.9rem;color:var(--soft);margin-bottom:36px;text-align:center;}
+.section-label{font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--soft);font-weight:600;width:100%;margin-bottom:10px;}
+.phase-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;margin-bottom:28px;}
+.phase-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.phase-btn.active{border-color:var(--accent);background:#FFF3EE;}
+.ph-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:4px;display:block;}
+.ph-count{font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--text);display:block;}
+.phase-btn.active .ph-label,.phase-btn.active .ph-count{color:var(--accent);}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:32px;}
+.mode-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 16px;cursor:pointer;transition:all .15s;text-align:left;}
+.mode-btn:hover{border-color:var(--text);}
+.mode-icon{font-size:1.6rem;margin-bottom:8px;display:block;}
+.mode-name{font-family:'DM Serif Display',serif;font-size:1.1rem;display:block;margin-bottom:4px;}
+.mode-desc{font-size:.78rem;color:var(--soft);display:block;line-height:1.4;}
+.mode-btn.challenge{border-color:var(--gold);background:#FFFBEB;}
+.mode-btn.challenge .mode-name{color:var(--gold);}
+.stats-summary{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ss-item{text-align:center;}
+.ss-item span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.ss-item strong{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--text);}
+#quiz{display:none;flex-direction:column;align-items:center;min-height:100vh;}
+.topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;background:var(--bg);z-index:10;}
+.tb-left{display:flex;align-items:center;gap:10px;}
+.back-btn{width:32px;height:32px;border:1.5px solid var(--border);border-radius:50%;background:var(--surface);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);}
+.topbar-title{font-family:'DM Serif Display',serif;font-size:1.1rem;}
+.topbar-badge{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--soft);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:3px 10px;}
+.timer-box{display:none;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:2.5px solid var(--gold);font-family:'DM Mono',monospace;font-size:.85rem;font-weight:600;color:var(--gold);}
+.timer-box.visible{display:flex;}
+.timer-box.urgent{border-color:var(--red);color:var(--red);}
+.prog-track{width:calc(100% - 24px);height:3px;background:var(--border);border-radius:99px;margin:6px 12px 14px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease;}
+.stats-row{display:flex;gap:8px;width:calc(100% - 24px);margin-bottom:14px;}
+.stat-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 6px;text-align:center;}
+.stat-box span{display:block;font-size:.6rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:1px;}
+.stat-box strong{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--text);}
+.stat-box.streak strong{color:var(--accent);}
+.card{width:calc(100% - 24px);background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:24px 20px 20px;text-align:center;margin-bottom:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;}
+.letter-type{font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;border-radius:99px;padding:3px 10px;margin-bottom:10px;}
+.letter-type.consonant{background:#FEF3C7;color:#92400E;}
+.letter-type.vowel{background:#DBEAFE;color:#1E40AF;}
+.prof-dots{display:flex;gap:5px;margin-bottom:10px;}
+.prof-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--border);background:transparent;transition:all .3s;}
+.prof-dot.filled{background:var(--green);border-color:var(--green);}
+.thai-letter{font-family:'Sarabun',sans-serif;font-size:9rem;font-weight:600;line-height:1;color:var(--text);margin-bottom:6px;}
+.letter-name{font-size:.82rem;color:var(--soft);letter-spacing:.3px;min-height:18px;transition:opacity .2s;}
+.letter-name.hidden{opacity:0;pointer-events:none;}
+.options{width:calc(100% - 24px);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.opt{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);cursor:pointer;transition:all .15s;text-align:center;}
+.opt:hover:not(:disabled){border-color:var(--accent);background:#FFF7F5;}
+.opt.correct{background:#F0FDF4;border-color:var(--green);color:var(--green);}
+.opt.wrong{background:#FEF2F2;border-color:var(--red);color:var(--red);}
+.opt:disabled{cursor:default;}
+.feedback{width:calc(100% - 24px);min-height:40px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:600;border-radius:10px;margin-bottom:10px;padding:8px;text-align:center;line-height:1.4;}
+.feedback.correct{background:#F0FDF4;color:var(--green);}
+.feedback.wrong{background:#FEF2F2;color:var(--red);}
+.next-btn{width:calc(100% - 24px);padding:15px;background:var(--text);color:white;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .15s;display:none;margin-bottom:8px;}
+.next-btn.visible{display:block;}
+.next-btn:hover{background:#3C3836;}
+#result{display:none;flex-direction:column;align-items:center;padding:48px 20px 40px;min-height:100vh;text-align:center;}
+.r-icon{font-size:3.5rem;margin-bottom:14px;}
+.r-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;}
+.r-score{font-family:'DM Mono',monospace;font-size:3.5rem;color:var(--accent);margin-bottom:4px;line-height:1;}
+.r-sub{font-size:.9rem;color:var(--soft);margin-bottom:20px;line-height:1.6;}
+.challenge-badge{background:#FFFBEB;border:1px solid #FCD34D;border-radius:12px;padding:12px 20px;font-size:.85rem;color:var(--gold);margin-bottom:20px;width:100%;}
+.r-stats{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
+.r-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 8px;}
+.r-stat span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.r-stat strong{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--text);}
+.r-actions{display:flex;flex-direction:column;gap:10px;width:100%;}
+.btn-primary{padding:15px;background:var(--text);color:white;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;width:100%;transition:.15s;}
+.btn-primary:hover{background:#3C3836;}
+.btn-secondary{padding:15px;background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-family:'Sarabun',sans-serif;font-size:1rem;cursor:pointer;width:100%;transition:.15s;}
+.btn-secondary:hover{border-color:var(--text);}
+@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.pop{animation:pop .25s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div id="home">
+  <div class="home-title">Thai Alphabet</div>
+  <div class="home-sub">Module 1 · Pronunciation Recognition</div>
+  <div class="section-label">Phase</div>
+  <div class="phase-grid">
+    <div class="phase-btn active" onclick="setPhase('consonant',this)"><span class="ph-label">Consonants</span><span class="ph-count">44</span></div>
+    <div class="phase-btn" onclick="setPhase('vowel',this)"><span class="ph-label">Vowels</span><span class="ph-count">32</span></div>
+    <div class="phase-btn" onclick="setPhase('all',this)"><span class="ph-label">Mixed</span><span class="ph-count">76</span></div>
+  </div>
+  <div class="section-label">Mode</div>
+  <div class="mode-grid">
+    <div class="mode-btn" onclick="startMode('learning')">
+      <span class="mode-icon">📖</span>
+      <span class="mode-name">Learning</span>
+      <span class="mode-desc">10 questions. Focuses on weak letters.</span>
+    </div>
+    <div class="mode-btn challenge" onclick="startMode('challenge')">
+      <span class="mode-icon">⚡</span>
+      <span class="mode-name">Challenge</span>
+      <span class="mode-desc">50 seconds. Answer as many as you can!</span>
+    </div>
+  </div>
+  <div class="section-label">Your progress</div>
+  <div class="stats-summary">
+    <div class="ss-item"><span>Learned</span><strong id="h-learned">0</strong></div>
+    <div class="ss-item"><span>Weak</span><strong id="h-weak">0</strong></div>
+    <div class="ss-item"><span>New</span><strong id="h-new">76</strong></div>
+  </div>
+</div>
+
+<div id="quiz">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div class="topbar-title" id="quiz-title">Learning</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="topbar-badge" id="pill">1/10</div>
+      <div class="timer-box" id="timer-box">50</div>
+    </div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+  <div class="stats-row">
+    <div class="stat-box"><span>Score</span><strong id="score">0</strong></div>
+    <div class="stat-box streak"><span>Streak</span><strong id="streak">0</strong></div>
+    <div class="stat-box"><span>Learned</span><strong id="learned-count">0</strong></div>
+  </div>
+  <div class="card" id="card">
+    <div class="letter-type consonant" id="ltype">Consonant</div>
+    <div class="prof-dots" id="prof-dots"></div>
+    <div class="thai-letter" id="thai-letter">ก</div>
+    <div class="letter-name hidden" id="letter-name"></div>
+  </div>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQ()">Continue →</button>
+</div>
+
+<div id="result">
+  <div class="r-icon" id="r-icon">🏆</div>
+  <div class="r-title" id="r-title">Well done!</div>
+  <div class="r-score" id="r-score">8/10</div>
+  <div class="r-sub" id="r-sub"></div>
+  <div class="challenge-badge" id="challenge-badge" style="display:none"></div>
+  <div class="r-stats">
+    <div class="r-stat"><span>Correct</span><strong id="r-correct">0</strong></div>
+    <div class="r-stat"><span>Best Streak</span><strong id="r-streak">0</strong></div>
+    <div class="r-stat"><span>Learned</span><strong id="r-learned">0</strong></div>
+  </div>
+  <div class="r-actions">
+    <button class="btn-primary" onclick="startMode(currentMode)">Practice Again</button>
+    <button class="btn-secondary" id="review-btn" onclick="reviewWrong()" style="display:none">Review Missed Letters</button>
+    <button class="btn-secondary" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+<script>
+const consonants=[
+  {thai:'ก',rom:'gaw',  name:'gaw gai',      meaning:'chicken',   type:'consonant'},
+  {thai:'ข',rom:'khaw', name:'khaw khai',    meaning:'egg',       type:'consonant'},
+  {thai:'ค',rom:'khaw2',name:'khaw khwai',   meaning:'buffalo',   type:'consonant'},
+  {thai:'ง',rom:'ngaw', name:'ngaw nguu',    meaning:'snake',     type:'consonant'},
+  {thai:'จ',rom:'jaw',  name:'jaw jaan',     meaning:'plate',     type:'consonant'},
+  {thai:'ช',rom:'chaw', name:'chaw chaang',  meaning:'elephant',  type:'consonant'},
+  {thai:'ซ',rom:'saw',  name:'saw soo',      meaning:'chain',     type:'consonant'},
+  {thai:'ญ',rom:'yaw',  name:'yaw ying',     meaning:'woman',     type:'consonant'},
+  {thai:'ด',rom:'daw',  name:'daw dek',      meaning:'child',     type:'consonant'},
+  {thai:'ต',rom:'taw',  name:'taw tao',      meaning:'turtle',    type:'consonant'},
+  {thai:'ถ',rom:'thaw', name:'thaw thung',   meaning:'bag',       type:'consonant'},
+  {thai:'ท',rom:'thaw2',name:'thaw thahaan', meaning:'soldier',   type:'consonant'},
+  {thai:'น',rom:'naw',  name:'naw nuu',      meaning:'mouse',     type:'consonant'},
+  {thai:'บ',rom:'baw',  name:'baw baimai',   meaning:'leaf',      type:'consonant'},
+  {thai:'ป',rom:'bpaw', name:'bpaw bplaa',   meaning:'fish',      type:'consonant'},
+  {thai:'ผ',rom:'phaw', name:'phaw phueng',  meaning:'bee',       type:'consonant'},
+  {thai:'ฝ',rom:'faw',  name:'faw faa',      meaning:'lid',       type:'consonant'},
+  {thai:'พ',rom:'phaw2',name:'phaw phaan',   meaning:'tray',      type:'consonant'},
+  {thai:'ฟ',rom:'faw2', name:'faw fan',      meaning:'tooth',     type:'consonant'},
+  {thai:'ม',rom:'maw',  name:'maw maa',      meaning:'horse',     type:'consonant'},
+  {thai:'ย',rom:'yaw2', name:'yaw yak',      meaning:'giant',     type:'consonant'},
+  {thai:'ร',rom:'raw',  name:'raw ruea',     meaning:'boat',      type:'consonant'},
+  {thai:'ล',rom:'law',  name:'law ling',     meaning:'monkey',    type:'consonant'},
+  {thai:'ว',rom:'waw',  name:'waw waen',     meaning:'ring',      type:'consonant'},
+  {thai:'ส',rom:'saw2', name:'saw suea',     meaning:'tiger',     type:'consonant'},
+  {thai:'ห',rom:'haw',  name:'haw heep',     meaning:'chest',     type:'consonant'},
+  {thai:'อ',rom:'aw',   name:'aw aang',      meaning:'basin',     type:'consonant'},
+  {thai:'ฮ',rom:'haw2', name:'haw nok huk',  meaning:'owl',       type:'consonant'},
+  {thai:'ฉ',rom:'chaw2',name:'chaw ching',   meaning:'cymbal',    type:'consonant'},
+  {thai:'ศ',rom:'saw3', name:'saw sala',     meaning:'pavilion',  type:'consonant'},
+  {thai:'ษ',rom:'saw4', name:'saw rue-si',   meaning:'hermit',    type:'consonant'},
+  {thai:'ฆ',rom:'khaw3',name:'khaw ra-khang',meaning:'bell',      type:'consonant'},
+  {thai:'ณ',rom:'naw2', name:'naw nen',      meaning:'novice',    type:'consonant'},
+  {thai:'ธ',rom:'thaw3',name:'thaw thong',   meaning:'flag',      type:'consonant'},
+  {thai:'ภ',rom:'phaw3',name:'phaw sam-phao',meaning:'sailboat',  type:'consonant'},
+  {thai:'ฌ',rom:'chaw3',name:'chaw cher',    meaning:'tree',      type:'consonant'},
+  {thai:'ฎ',rom:'daw2', name:'daw cha-daa',  meaning:'headdress', type:'consonant'},
+  {thai:'ฏ',rom:'taw2', name:'taw bpatak',   meaning:'spear',     type:'consonant'},
+  {thai:'ฐ',rom:'thaw4',name:'thaw thaan',   meaning:'pedestal',  type:'consonant'},
+  {thai:'ฑ',rom:'thaw5',name:'thaw montho',  meaning:'Montho',    type:'consonant'},
+  {thai:'ฒ',rom:'thaw6',name:'thaw phu-thao',meaning:'elder',     type:'consonant'},
+  {thai:'ฬ',rom:'law2', name:'law ju-laa',   meaning:'kite',      type:'consonant'},
+  {thai:'ฯ',rom:'yaw3', name:'mai yamok',    meaning:'abbreviate',type:'consonant'},
+  {thai:'ๆ',rom:'rep',  name:'mai yamok2',   meaning:'repeat',    type:'consonant'},
+];
+const vowels=[
+  {thai:'า', rom:'-aa',  name:'sara aa',     meaning:'long A',   type:'vowel'},
+  {thai:'ิ', rom:'-i',   name:'sara i',      meaning:'short I',  type:'vowel'},
+  {thai:'ี', rom:'-ii',  name:'sara ii',     meaning:'long I',   type:'vowel'},
+  {thai:'ึ', rom:'-eu',  name:'sara eu',     meaning:'short EU', type:'vowel'},
+  {thai:'ื', rom:'-euu', name:'sara euu',    meaning:'long EU',  type:'vowel'},
+  {thai:'ุ', rom:'-u',   name:'sara u',      meaning:'short U',  type:'vowel'},
+  {thai:'ู', rom:'-uu',  name:'sara uu',     meaning:'long U',   type:'vowel'},
+  {thai:'เ', rom:'e-',   name:'sara e',      meaning:'long E',   type:'vowel'},
+  {thai:'แ', rom:'ae-',  name:'sara ae',     meaning:'AE sound', type:'vowel'},
+  {thai:'โ', rom:'o-',   name:'sara o',      meaning:'long O',   type:'vowel'},
+  {thai:'ใ', rom:'ai-',  name:'sara ai (1)', meaning:'AI sound', type:'vowel'},
+  {thai:'ไ', rom:'ai2-', name:'sara ai (2)', meaning:'AI sound', type:'vowel'},
+  {thai:'่', rom:'tone1',name:'mai ek',      meaning:'tone 1',   type:'vowel'},
+  {thai:'้', rom:'tone2',name:'mai tho',     meaning:'tone 2',   type:'vowel'},
+  {thai:'๊', rom:'tone3',name:'mai tri',     meaning:'tone 3',   type:'vowel'},
+  {thai:'๋', rom:'tone4',name:'mai jattawa', meaning:'tone 4',   type:'vowel'},
+  {thai:'ั', rom:'-a',   name:'sara a',      meaning:'short A',  type:'vowel'},
+  {thai:'เะ',rom:'e-sh', name:'sara e short',meaning:'short E',  type:'vowel'},
+  {thai:'แะ',rom:'ae-sh',name:'sara ae short',meaning:'short AE',type:'vowel'},
+  {thai:'อ', rom:'-o',   name:'sara or',     meaning:'O sound',  type:'vowel'},
+  {thai:'เอะ',rom:'oe-sh',name:'sara oe short',meaning:'OE short',type:'vowel'},
+  {thai:'เอ',rom:'oe-',  name:'sara oe long',meaning:'long OE',  type:'vowel'},
+  {thai:'เีย',rom:'ia-', name:'sara ia',     meaning:'IA sound', type:'vowel'},
+  {thai:'ัว',rom:'ua-',  name:'sara ua',     meaning:'UA sound', type:'vowel'},
+  {thai:'ือ',rom:'uea-', name:'sara uea',    meaning:'UEA sound',type:'vowel'},
+  {thai:'เาะ',rom:'-or', name:'sara or short',meaning:'short OR',type:'vowel'},
+  {thai:'าว',rom:'-ao',  name:'sara ao',     meaning:'AO sound', type:'vowel'},
+  {thai:'เา',rom:'-ao2', name:'sara ao long',meaning:'long AO',  type:'vowel'},
+  {thai:'ํา',rom:'-am',  name:'sara am',     meaning:'AM sound', type:'vowel'},
+  {thai:'็',  rom:'-sh', name:'mai taikhu',  meaning:'shortener',type:'vowel'},
+  {thai:'์',  rom:'sil', name:'thanthakat',  meaning:'silent',   type:'vowel'},
+  {thai:'ๆ', rom:'rep2', name:'mai yamok',   meaning:'repeat',   type:'vowel'},
+];
+const allLetters=[...consonants,...vowels];
+
+let proficiency=JSON.parse(localStorage.getItem('th_prof3')||'{}');
+function getLevel(thai){return proficiency[thai]??0;}
+function updateLevel(thai,correct){
+  proficiency[thai]=correct?Math.min(3,getLevel(thai)+1):Math.max(0,getLevel(thai)-1);
+  localStorage.setItem('th_prof3',JSON.stringify(proficiency));
+}
+
+let pool=[...consonants],current=null,score=0,streak=0,bestStreak=0;
+let qIdx=0,wrongList=[],currentMode='learning',currentPhase='consonant';
+let timerInterval=null,timeLeft=50,totalAnswered=0;
+let recentLetters=[];
+const ROUND=10;
+const RECENT_LIMIT=3;
+
+function setPhase(phase,btn){
+  currentPhase=phase;
+  document.querySelectorAll('.phase-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updateHomeSummary();
+}
+function getPool(phase){
+  if(phase==='consonant')return consonants;
+  if(phase==='vowel')return vowels;
+  return allLetters;
+}
+function updateHomeSummary(){
+  const p=getPool(currentPhase);
+  document.getElementById('h-learned').textContent=p.filter(l=>getLevel(l.thai)>=3).length;
+  document.getElementById('h-weak').textContent=p.filter(l=>{const lv=getLevel(l.thai);return lv>=1&&lv<3;}).length;
+  document.getElementById('h-new').textContent=p.filter(l=>getLevel(l.thai)===0).length;
+}
+function goHome(){
+  clearInterval(timerInterval);
+  recentLetters=[];
+  show('home');hide('quiz');hide('result');
+  updateHomeSummary();
+}
+
+// Smart selection: 30% new, 50% weak, 20% learned
+// Also avoids repeating the last few letters too quickly.
+function rememberRecent(thai){
+  recentLetters.push(thai);
+  if(recentLetters.length>RECENT_LIMIT)recentLetters.shift();
+}
+function selectNext(){
+  const filtered=pool.filter(l=>!recentLetters.includes(l.thai));
+  const source=filtered.length?filtered:pool;
+  const newL=source.filter(l=>getLevel(l.thai)===0);
+  const weak=source.filter(l=>{const lv=getLevel(l.thai);return lv>=1&&lv<3;});
+  const learned=source.filter(l=>getLevel(l.thai)>=3);
+  const r=Math.random();
+  if(r<0.30&&newL.length)return pick(newL);
+  if(r<0.80&&weak.length)return pick(weak);
+  if(learned.length)return pick(learned);
+  if(weak.length)return pick(weak);
+  if(newL.length)return pick(newL);
+  return pick(source);
+}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+function startMode(mode){
+  currentMode=mode;
+  pool=getPool(currentPhase);
+  score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];
+  hide('home');hide('result');show('quiz');
+  document.getElementById('quiz-title').textContent=mode==='challenge'?'Challenge':'Learning';
+  const tb=document.getElementById('timer-box');
+  clearInterval(timerInterval);
+  if(mode==='challenge'){
+    timeLeft=50;tb.textContent=50;
+    tb.classList.add('visible');tb.classList.remove('urgent');
+    timerInterval=setInterval(()=>{
+      timeLeft--;tb.textContent=timeLeft;
+      if(timeLeft<=10)tb.classList.add('urgent');
+      if(timeLeft<=0){clearInterval(timerInterval);showResult();}
+    },1000);
+  }else{tb.classList.remove('visible');}
+  updateStats();loadQ();
+}
+
+function loadQ(){
+  current=selectNext();
+  rememberRecent(current.thai);
+  const lv=getLevel(current.thai);
+  const lt=document.getElementById('ltype');
+  lt.textContent=current.type==='consonant'?'Consonant':'Vowel';
+  lt.className='letter-type '+current.type;
+  const dotsEl=document.getElementById('prof-dots');
+  dotsEl.innerHTML='';
+  for(let i=0;i<3;i++){const d=document.createElement('div');d.className='prof-dot'+(i<lv?' filled':'');dotsEl.appendChild(d);}
+  document.getElementById('thai-letter').textContent=current.thai;
+  const nm=document.getElementById('letter-name');nm.textContent='';nm.classList.add('hidden');
+  if(currentMode==='learning'){
+    document.getElementById('prog').style.width=((qIdx/ROUND)*100)+'%';
+    document.getElementById('pill').textContent=(qIdx+1)+'/'+ROUND;
+  }else{
+    document.getElementById('prog').style.width='0%';
+    document.getElementById('pill').textContent=totalAnswered+' done';
+  }
+  const fb=document.getElementById('feedback');fb.textContent='';fb.className='feedback';
+  document.getElementById('next-btn').classList.remove('visible');
+
+  const usedRoms=new Set([current.rom]);
+  const distPool=shuffle(allLetters.filter(l=>l.type===current.type&&l.rom!==current.rom));
+  const distractors=[];
+  for(const l of distPool){
+    if(!usedRoms.has(l.rom)){usedRoms.add(l.rom);distractors.push({rom:l.rom,thai:l.thai});}
+    if(distractors.length===3)break;
+  }
+  const opts=shuffle([{rom:current.rom,thai:current.thai,correct:true},...distractors.map(d=>({...d,correct:false}))]);
+  const container=document.getElementById('options');container.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');btn.className='opt';
+    btn.textContent=opt.rom;btn.dataset.thai=opt.thai;
+    btn.onclick=()=>checkAnswer(btn,opt.correct);
+    container.appendChild(btn);
+  });
+  const card=document.getElementById('card');card.style.animation='none';card.offsetHeight;card.style.animation='slideUp .3s ease both';
+}
+
+function checkAnswer(btn,isCorrect){
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  totalAnswered++;
+  const nm=document.getElementById('letter-name');nm.textContent=current.name+' · '+current.meaning;nm.classList.remove('hidden');
+  updateLevel(current.thai,isCorrect);
+  const newLv=getLevel(current.thai);
+  const fb=document.getElementById('feedback');
+  if(isCorrect){
+    btn.classList.add('correct');score++;streak++;bestStreak=Math.max(bestStreak,streak);
+    let msg=streak>=3?'🔥 '+streak+' in a row! ':'✓ Correct! ';
+    if(newLv>=3)msg+='⭐ Learned!';
+    fb.textContent=msg;fb.className='feedback correct';
+    document.getElementById('thai-letter').classList.add('pop');
+    setTimeout(()=>document.getElementById('thai-letter').classList.remove('pop'),250);
+  }else{
+    btn.classList.add('wrong');streak=0;wrongList.push(current);
+    document.querySelectorAll('.opt').forEach(b=>{if(b.dataset.thai===current.thai)b.classList.add('correct');});
+    fb.textContent='✗ "'+current.rom+'" — '+current.name;fb.className='feedback wrong';
+  }
+  updateStats();qIdx++;
+  if(currentMode==='learning'&&qIdx>=ROUND){setTimeout(()=>showResult(),700);}
+  else{document.getElementById('next-btn').classList.add('visible');}
+}
+
+function nextQ(){loadQ();}
+
+function showResult(){
+  clearInterval(timerInterval);hide('quiz');show('result');
+  const total=currentMode==='learning'?ROUND:totalAnswered;
+  const pct=total>0?score/total:0;
+  const learnedCount=getPool(currentPhase).filter(l=>getLevel(l.thai)>=3).length;
+  let icon,title,sub;
+  const cb=document.getElementById('challenge-badge');
+  if(currentMode==='challenge'){
+    icon='⚡';title="Time's up!";
+    sub='You answered '+totalAnswered+' questions in 50 seconds.';
+    cb.style.display='block';
+    cb.textContent='⚡ '+score+' correct · Accuracy: '+(totalAnswered>0?Math.round(score/totalAnswered*100):0)+'%';
+  }else{
+    cb.style.display='none';
+    if(pct===1){icon='🏆';title='Perfect!';sub='Every letter correct. สุดยอด!';}
+    else if(pct>=0.8){icon='⭐';title='Excellent!';sub='Almost perfect. Keep it up!';}
+    else if(pct>=0.6){icon='👍';title='Good job!';sub='Keep focusing on weak letters.';}
+    else{icon='📖';title='Keep going!';sub='Every mistake is progress!';}
+  }
+  document.getElementById('r-icon').textContent=icon;
+  document.getElementById('r-title').textContent=title;
+  document.getElementById('r-score').textContent=score+'/'+total;
+  document.getElementById('r-sub').textContent=sub;
+  document.getElementById('r-correct').textContent=score;
+  document.getElementById('r-streak').textContent=bestStreak;
+  document.getElementById('r-learned').textContent=learnedCount;
+  document.getElementById('review-btn').style.display=wrongList.length>0?'block':'none';
+  updateHomeSummary();
+}
+
+function reviewWrong(){
+  const missed=[...new Set(wrongList.map(l=>l.thai))];
+  pool=allLetters.filter(l=>missed.includes(l.thai));
+  score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];currentMode='learning';
+  hide('result');show('quiz');
+  document.getElementById('quiz-title').textContent='Review';
+  document.getElementById('timer-box').classList.remove('visible');
+  updateStats();loadQ();
+}
+
+function updateStats(){
+  document.getElementById('score').textContent=score;
+  document.getElementById('streak').textContent=streak;
+  document.getElementById('learned-count').textContent=getPool(currentPhase).filter(l=>getLevel(l.thai)>=3).length;
+}
+function show(id){const el=document.getElementById(id);el.style.display='flex';el.style.flexDirection='column';el.style.alignItems='center';}
+function hide(id){document.getElementById(id).style.display='none';}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+updateHomeSummary();
+</script>
+</body>
+</html>
