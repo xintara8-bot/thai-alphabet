@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Thai Lessons</title>
 <script src="data1.js"></script>
+<script src="data2.js"></script>
 <style>
 :root{
   --bg:#F7F4EF;--surface:#FFFFFF;--border:#E8E2D9;--text:#1C1917;--soft:#78716C;
@@ -16,7 +17,7 @@ body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,
 button{font:inherit}
 .hidden{display:none!important}
 
-#home,#lesson-home,#quiz,#result{padding:22px 16px 28px;min-height:100vh}
+#home,#lesson-home,#dialogue-screen,#quiz,#result{padding:22px 16px 28px;min-height:100vh}
 .title{font-size:2rem;font-weight:800;margin:6px 0}
 .sub{color:var(--soft);font-size:.95rem;line-height:1.5}
 .section{margin-top:22px}
@@ -28,7 +29,9 @@ button{font:inherit}
 }
 .module-btn .name,.mode-btn .name,.lesson-btn .name{font-size:1.05rem;font-weight:700;margin-bottom:4px}
 .module-btn .desc,.mode-btn .desc,.lesson-btn .desc{font-size:.84rem;color:var(--soft);line-height:1.45}
+.step-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:800;margin-bottom:5px}
 .lesson-btn{display:flex;justify-content:space-between;align-items:center}
+.lesson-btn.active{border-color:var(--accent);background:#FFF7F5}
 .lesson-meta{font-size:.8rem;color:var(--soft)}
 .lesson-status{font-size:.78rem;color:var(--accent);font-weight:700}
 
@@ -76,6 +79,12 @@ button{font:inherit}
 .detail-thai{font-size:1.1rem;font-weight:700;margin-bottom:3px}
 .detail-cn{color:var(--soft);font-size:.93rem}
 .note{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:.9rem}
+.dialogue-list{display:grid;gap:12px;margin-top:14px}
+.dialogue-line{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;line-height:1.5}
+.dialogue-speaker{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:800;margin-bottom:6px}
+.dialogue-thai{font-size:1.25rem;font-weight:800;margin-bottom:4px}
+.dialogue-cn{font-size:.95rem;color:var(--soft);margin-bottom:4px}
+.dialogue-rom{font-size:.88rem;color:var(--soft);font-style:italic}
 
 .next-btn,.primary-btn,.secondary-btn{width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;margin-top:12px}
 .primary-btn,.next-btn{background:var(--text);color:#fff;font-weight:700}
@@ -95,18 +104,18 @@ button{font:inherit}
 
 <div id="home">
   <div class="title">Thai Learning</div>
-  <div class="sub">A lesson-based Thai study app. Keep Pronunciation as Module 1, and use Lessons for words and dialogue.</div>
+  <div class="sub">Study Thai letters first, then move through lesson-based dialogue, keywords, patterns, and practice.</div>
 
   <div class="section">
     <div class="section-label">Modules</div>
     <div class="module-grid">
       <button class="module-btn" onclick="openPronunciation()">
         <div class="name">Pronunciation</div>
-        <div class="desc">Use your existing pronunciation file for consonants, vowels, and recognition practice.</div>
+        <div class="desc">Learn Thai letters, then practice pronunciation, writing, and keyboard recall.</div>
       </button>
       <button class="module-btn" onclick="goLessonHome()">
         <div class="name">Lessons</div>
-        <div class="desc">Study by lesson. Each lesson has Words and Dialogue.</div>
+        <div class="desc">Study by lesson with dialogue, keywords, patterns, and practice.</div>
       </button>
     </div>
   </div>
@@ -130,6 +139,24 @@ button{font:inherit}
     <div class="section-label">Current lesson</div>
     <div id="current-lesson-panel"></div>
   </div>
+</div>
+
+<div id="dialogue-screen" class="hidden">
+  <div class="topbar">
+    <div class="left-wrap">
+      <button class="back-btn" onclick="backToLessonHome()">←</button>
+      <div class="top-title" id="dialogue-title">Lesson</div>
+    </div>
+    <div class="badge">Step 1</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Dialogue</div>
+    <div class="sub" id="dialogue-subtitle"></div>
+    <div class="dialogue-list" id="dialogue-list"></div>
+  </div>
+
+  <button class="primary-btn" onclick="startLessonKeywords()">Continue to Keywords →</button>
 </div>
 
 <div id="quiz" class="hidden">
@@ -187,8 +214,39 @@ button{font:inherit}
 </div>
 
 <script>
-if (!window.lessons || !Array.isArray(window.lessons)) {
-  document.body.innerHTML = '<div style="padding:24px;font-family:sans-serif"><h2>Data not loaded</h2><p>Please keep this HTML and <b>data1.js</b> in the same folder.</p></div>';
+const rawLessonData = [window.LESSON_1, window.LESSON_2].filter(Boolean);
+window.lessons = rawLessonData.map(normalizeLessonData);
+
+if (!window.lessons || !Array.isArray(window.lessons) || window.lessons.length === 0) {
+  document.body.innerHTML = '<div style="padding:24px;font-family:sans-serif"><h2>Data not loaded</h2><p>Please keep this HTML, <b>data1.js</b>, and <b>data2.js</b> in the same folder.</p></div>';
+}
+
+function normalizeLessonData(source) {
+  const lessonId = source.id;
+  const dialogueById = Object.fromEntries((source.dialogue || []).map(line => [line.id, line]));
+  return {
+    id: lessonId,
+    titleEn: source.title || `Lesson ${lessonId}`,
+    titleThai: source.titleThai || '',
+    titleCn: source.titleChinese || '',
+    topic: source.titleThai || source.titleChinese || source.title || `Lesson ${lessonId}`,
+    words: (source.keywords || []).map(word => {
+      const example = (word.sentenceIds || []).map(id => dialogueById[id]).find(Boolean);
+      return {
+        ...word,
+        id: `L${lessonId}-${word.id}`,
+        sourceId: word.id,
+        exampleThai: example?.thai || '',
+        exampleChinese: example?.chinese || '',
+        note: word.level ? `Level: ${word.level}` : ''
+      };
+    }),
+    dialogues: (source.practice || []).map(item => ({
+      ...item,
+      id: `L${lessonId}-${item.id}`
+    })),
+    source
+  };
 }
 
 const WORD_ROUND = 10;
@@ -245,18 +303,18 @@ function hide(id){ document.getElementById(id).classList.add('hidden'); }
 
 function goHome() {
   clearInterval(timerInterval);
-  hide('lesson-home'); hide('quiz'); hide('result');
+  hide('lesson-home'); hide('dialogue-screen'); hide('quiz'); hide('result');
   show('home');
 }
 function goLessonHome() {
   clearInterval(timerInterval);
-  hide('home'); hide('quiz'); hide('result');
+  hide('home'); hide('dialogue-screen'); hide('quiz'); hide('result');
   show('lesson-home');
   renderLessonHome();
 }
 function backToLessonHome() {
   clearInterval(timerInterval);
-  hide('quiz'); hide('result');
+  hide('dialogue-screen'); hide('quiz'); hide('result');
   show('lesson-home');
   renderLessonHome();
 }
@@ -271,20 +329,20 @@ function renderLessonHome() {
   list.innerHTML = '';
   lessons.forEach((lesson, idx) => {
     const btn = document.createElement('button');
-    btn.className = 'lesson-btn';
+    btn.className = 'lesson-btn' + (idx === currentLessonIndex ? ' active' : '');
     btn.innerHTML = `
       <div>
         <div class="name">Lesson ${lesson.id} · ${lesson.titleEn}</div>
-        <div class="desc">${lesson.titleCn} · ${lesson.topic}</div>
+        <div class="desc">${lesson.titleThai} · ${lesson.titleCn}</div>
       </div>
       <div style="text-align:right">
-        <div class="lesson-meta">${lesson.words.length} words · ${lesson.dialogues.length} dialogues</div>
+        <div class="lesson-meta">${lesson.words.length} keywords · ${lesson.dialogues.length} practice items</div>
         <div class="lesson-status">${lessonStatusText(lesson.id)}</div>
       </div>
     `;
     btn.onclick = () => {
       currentLessonIndex = idx;
-      renderCurrentLessonPanel();
+      renderLessonHome();
     };
     list.appendChild(btn);
   });
@@ -299,20 +357,28 @@ function renderCurrentLessonPanel() {
   panel.innerHTML = `
     <div class="card-btn">
       <div class="name" style="font-size:1.1rem;font-weight:800;margin-bottom:6px">Lesson ${lesson.id} · ${lesson.titleEn}</div>
-      <div class="desc" style="margin-bottom:12px">${lesson.titleCn}. Topic: ${lesson.topic}</div>
-      <div class="lesson-meta" style="margin-bottom:12px">Words learned: ${learned}/${lesson.words.length} · Status: ${lessonStatusText(lesson.id)}</div>
+      <div class="desc" style="margin-bottom:12px">${lesson.titleThai} · ${lesson.titleCn}</div>
+      <div class="lesson-meta" style="margin-bottom:12px">Keywords learned: ${learned}/${lesson.words.length} · Practice items: ${lesson.dialogues.length} · Status: ${lessonStatusText(lesson.id)}</div>
       <div class="mode-grid">
-        <button class="mode-btn" onclick="startWordsLearning()">
-          <div class="name">Words · Learning</div>
-          <div class="desc">10 questions. Weighted by weak words, with level, review, example, and note.</div>
-        </button>
-        <button class="mode-btn" onclick="startWordsChallenge()">
-          <div class="name">Words · Challenge</div>
-          <div class="desc">50 seconds. Fast review using the same word data.</div>
-        </button>
-        <button class="mode-btn" onclick="startDialogueLearning()">
+        <button class="mode-btn" onclick="startLessonDialogue()">
+          <div class="step-label">Step 1</div>
           <div class="name">Dialogue</div>
-          <div class="desc">Choose the best response. Shows explanation and supports review.</div>
+          <div class="desc">Read and understand the full conversation. Each line includes Thai, Chinese, and speaker.</div>
+        </button>
+        <button class="mode-btn" onclick="startLessonKeywords()">
+          <div class="step-label">Step 2</div>
+          <div class="name">Keywords</div>
+          <div class="desc">Learn the core words that support understanding the dialogue.</div>
+        </button>
+        <button class="mode-btn" onclick="startLessonPatterns()">
+          <div class="step-label">Step 3</div>
+          <div class="name">Patterns</div>
+          <div class="desc">Understand reusable sentence patterns from this lesson.</div>
+        </button>
+        <button class="mode-btn" onclick="startLessonPractice()">
+          <div class="step-label">Step 4</div>
+          <div class="name">Practice</div>
+          <div class="desc">Practice using meaning match, reply selection, and pattern fill.</div>
         </button>
       </div>
     </div>
@@ -351,9 +417,50 @@ function startDialogueLearning() {
   openQuizScreen();
   loadDialogueQuestion();
 }
+function startLessonDialogue() {
+  openDialogueScreen();
+}
+function startLessonKeywords() {
+  startWordsLearning();
+}
+function startLessonPatterns() {
+  alert('Patterns coming soon');
+}
+function startLessonPractice() {
+  startDialogueLearning();
+}
+
+function openDialogueScreen() {
+  clearInterval(timerInterval);
+  markLessonStarted(lessons[currentLessonIndex].id);
+  hide('home'); hide('lesson-home'); hide('quiz'); hide('result');
+  show('dialogue-screen');
+  renderDialogue();
+}
+
+function renderDialogue() {
+  const lesson = lessons[currentLessonIndex];
+  const lines = lesson.source.dialogue || [];
+  document.getElementById('dialogue-title').textContent = `Lesson ${lesson.id} · ${lesson.titleEn}`;
+  document.getElementById('dialogue-subtitle').textContent = `${lesson.titleThai} · ${lesson.titleCn}`;
+
+  const list = document.getElementById('dialogue-list');
+  list.innerHTML = '';
+  lines.forEach(line => {
+    const card = document.createElement('div');
+    card.className = 'dialogue-line';
+    card.innerHTML = `
+      <div class="dialogue-speaker">${line.speaker || 'Speaker'}</div>
+      <div class="dialogue-thai">${line.thai || ''}</div>
+      <div class="dialogue-cn">${line.chinese || ''}</div>
+      ${line.rom ? `<div class="dialogue-rom">${line.rom}</div>` : ''}
+    `;
+    list.appendChild(card);
+  });
+}
 
 function openQuizScreen() {
-  hide('lesson-home'); hide('result'); show('quiz');
+  hide('lesson-home'); hide('dialogue-screen'); hide('result'); show('quiz');
   document.getElementById('quiz-title').textContent = `Lesson ${lessons[currentLessonIndex].id} · ${lessons[currentLessonIndex].titleEn}`;
   document.getElementById('feedback').className = 'feedback info';
   document.getElementById('feedback').textContent = 'Choose one answer.';
@@ -635,7 +742,7 @@ function showResult() {
       ? `You answered ${totalAnswered} word questions in 50 seconds.`
       : 'You reviewed meanings, examples, and notes.';
     document.getElementById('res-best').textContent = bestStreak;
-    document.getElementById('result-note').textContent = 'This words screen now matches the lesson requirement: meaning + example + note + level logic.';
+    document.getElementById('result-note').textContent = 'Keep building this lesson by reviewing missed keywords and examples.';
   } else {
     total = currentPool.length;
     reviewCount = [...new Set(wrongItems.map(x => [x.id, x])).values()].length;
@@ -643,7 +750,7 @@ function showResult() {
     title = 'Dialogue finished';
     sub = 'You practiced response selection with explanation and review support.';
     document.getElementById('res-best').textContent = score;
-    document.getElementById('result-note').textContent = 'Dialogue is still lighter than Words, as planned.';
+    document.getElementById('result-note').textContent = 'Review missed dialogue prompts before moving on.';
   }
 
   document.getElementById('result-icon').textContent = icon;
@@ -689,7 +796,7 @@ function startReview() {
   }
 }
 
-renderLessonHome();
+if (window.lessons.length) renderLessonHome();
 </script>
 </body>
 </html>
