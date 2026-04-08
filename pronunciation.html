@@ -29,8 +29,6 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 .mode-icon{font-size:1.6rem;margin-bottom:8px;display:block;}
 .mode-name{font-family:'DM Serif Display',serif;font-size:1.1rem;display:block;margin-bottom:4px;}
 .mode-desc{font-size:.78rem;color:var(--soft);display:block;line-height:1.4;}
-.mode-btn.test{border-color:var(--gold);background:#FFFBEB;}
-.mode-btn.test .mode-name{color:var(--gold);}
 .stats-summary{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .ss-item{text-align:center;}
 .ss-item span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
@@ -428,7 +426,7 @@ function setPhase(phase){
   document.querySelectorAll('.phase-btn').forEach(b=>b.classList.toggle('active',b.dataset.phase===phase));
   document.querySelectorAll('#home .mode-btn').forEach(b=>b.classList.remove('disabled'));
   document.querySelector('#home .mode-btn:not(.test) .mode-desc').textContent='Study letters in order. No score or feedback.';
-  document.querySelector('#home .mode-btn.test .mode-desc').textContent='4-option pronunciation quiz.';
+  document.querySelector('#home .mode-btn.test .mode-desc').textContent='Choose a test type: pronunciation, writing, or keyboard practice.';
   updateHomeSummary();
   if(document.getElementById('learn').style.display==='flex')startLearn();
 }
