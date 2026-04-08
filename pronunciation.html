@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Thai Alphabet</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&amp;family=DM+Serif+Display&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F7F4EF;--surface:#FFFFFF;--border:#E8E2D9;--text:#1C1917;--soft:#78716C;--accent:#C2410C;--green:#15803D;--red:#DC2626;--gold:#D97706;--radius:16px;--shadow:0 2px 16px rgba(0,0,0,0.07);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -24,24 +24,44 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:32px;}
 .mode-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 16px;cursor:pointer;transition:all .15s;text-align:left;}
 .mode-btn:hover{border-color:var(--text);}
+.mode-btn.disabled{opacity:.5;cursor:not-allowed;}
+.mode-btn.disabled:hover{border-color:var(--border);background:var(--surface);}
 .mode-icon{font-size:1.6rem;margin-bottom:8px;display:block;}
 .mode-name{font-family:'DM Serif Display',serif;font-size:1.1rem;display:block;margin-bottom:4px;}
 .mode-desc{font-size:.78rem;color:var(--soft);display:block;line-height:1.4;}
-.mode-btn.challenge{border-color:var(--gold);background:#FFFBEB;}
-.mode-btn.challenge .mode-name{color:var(--gold);}
+.mode-btn.test{border-color:var(--gold);background:#FFFBEB;}
+.mode-btn.test .mode-name{color:var(--gold);}
 .stats-summary{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .ss-item{text-align:center;}
 .ss-item span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
 .ss-item strong{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--text);}
-#quiz{display:none;flex-direction:column;align-items:center;min-height:100vh;}
+#learn{display:none;flex-direction:column;align-items:center;min-height:100vh;}
+.learn-card{margin-top:8px;}
+.learn-letter{margin-bottom:14px;}
+.learn-pronunciation{font-family:'DM Mono',monospace;font-size:1.35rem;color:var(--text);min-height:32px;margin-bottom:4px;transition:opacity .2s;}
+.learn-pronunciation.hidden{opacity:0;}
+.learn-sub{font-size:.82rem;color:var(--soft);min-height:22px;}
+.learn-controls{width:calc(100% - 24px);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.learn-phase-grid{width:calc(100% - 24px);margin-bottom:14px;}
+.toggle-btn{padding:15px;background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-family:'Sarabun',sans-serif;font-size:.95rem;cursor:pointer;transition:.15s;}
+.toggle-btn:hover{border-color:var(--text);}
+.letter-bar{width:calc(100% - 24px);display:flex;gap:6px;overflow-x:auto;padding:4px 0 16px;margin-bottom:4px;-webkit-overflow-scrolling:touch;}
+.mini-letter{flex:0 0 auto;min-width:38px;height:38px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:1.2rem;font-weight:600;color:var(--text);cursor:pointer;transition:.15s;}
+.mini-letter.active{border-color:var(--accent);background:#FFF3EE;color:var(--accent);}
+#test-menu{display:none;flex-direction:column;align-items:center;min-height:100vh;}
+.test-panel{width:calc(100% - 24px);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px;}
+.test-panel-title{font-family:'DM Serif Display',serif;font-size:1.35rem;margin-bottom:6px;}
+.test-panel-sub{font-size:.85rem;color:var(--soft);line-height:1.5;margin-bottom:16px;}
+.test-type-grid{display:grid;grid-template-columns:1fr;gap:10px;width:100%;}
+.test-type-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;transition:.15s;}
+.test-type-btn:hover{border-color:var(--accent);background:#FFF7F5;}
+.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;}
+#quiz,#writing-test,#keyboard-test{display:none;flex-direction:column;align-items:center;min-height:100vh;}
 .topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;background:var(--bg);z-index:10;}
 .tb-left{display:flex;align-items:center;gap:10px;}
 .back-btn{width:32px;height:32px;border:1.5px solid var(--border);border-radius:50%;background:var(--surface);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);}
 .topbar-title{font-family:'DM Serif Display',serif;font-size:1.1rem;}
 .topbar-badge{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--soft);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:3px 10px;}
-.timer-box{display:none;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:2.5px solid var(--gold);font-family:'DM Mono',monospace;font-size:.85rem;font-weight:600;color:var(--gold);}
-.timer-box.visible{display:flex;}
-.timer-box.urgent{border-color:var(--red);color:var(--red);}
 .prog-track{width:calc(100% - 24px);height:3px;background:var(--border);border-radius:99px;margin:6px 12px 14px;overflow:hidden;}
 .prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease;}
 .stats-row{display:flex;gap:8px;width:calc(100% - 24px);margin-bottom:14px;}
@@ -50,6 +70,7 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 .stat-box strong{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--text);}
 .stat-box.streak strong{color:var(--accent);}
 .card{width:calc(100% - 24px);background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:24px 20px 20px;text-align:center;margin-bottom:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;}
+.card.learn-card{min-height:280px;margin-top:8px;}
 .letter-type{font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;border-radius:99px;padding:3px 10px;margin-bottom:10px;}
 .letter-type.consonant{background:#FEF3C7;color:#92400E;}
 .letter-type.vowel{background:#DBEAFE;color:#1E40AF;}
@@ -57,8 +78,17 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 .prof-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--border);background:transparent;transition:all .3s;}
 .prof-dot.filled{background:var(--green);border-color:var(--green);}
 .thai-letter{font-family:'Sarabun',sans-serif;font-size:9rem;font-weight:600;line-height:1;color:var(--text);margin-bottom:6px;}
+.thai-letter.learn-letter{font-size:10rem;margin-bottom:14px;}
+.thai-letter.hidden{display:none;}
 .letter-name{font-size:.82rem;color:var(--soft);letter-spacing:.3px;min-height:18px;transition:opacity .2s;}
 .letter-name.hidden{opacity:0;pointer-events:none;}
+.writing-prompt{font-family:'DM Mono',monospace;font-size:2.2rem;color:var(--text);margin:24px 0 18px;}
+.writing-prompt.hidden{display:none;}
+.writing-answer{font-size:.9rem;color:var(--soft);line-height:1.6;min-height:50px;transition:opacity .2s;}
+.writing-answer strong{font-family:'DM Mono',monospace;font-size:1.25rem;color:var(--text);display:block;margin-bottom:2px;}
+.writing-answer.hidden{opacity:0;pointer-events:none;}
+.keyboard-input{width:calc(100% - 24px);background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:15px;text-align:center;font-family:'Sarabun',sans-serif;font-size:2rem;color:var(--text);margin-bottom:10px;}
+.keyboard-input:focus{outline:none;border-color:var(--accent);}
 .options{width:calc(100% - 24px);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .opt{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 8px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);cursor:pointer;transition:all .15s;text-align:center;}
 .opt:hover:not(:disabled){border-color:var(--accent);background:#FFF7F5;}
@@ -76,7 +106,6 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 .r-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;}
 .r-score{font-family:'DM Mono',monospace;font-size:3.5rem;color:var(--accent);margin-bottom:4px;line-height:1;}
 .r-sub{font-size:.9rem;color:var(--soft);margin-bottom:20px;line-height:1.6;}
-.challenge-badge{background:#FFFBEB;border:1px solid #FCD34D;border-radius:12px;padding:12px 20px;font-size:.85rem;color:var(--gold);margin-bottom:20px;width:100%;}
 .r-stats{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
 .r-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 8px;}
 .r-stat span{display:block;font-size:.65rem;color:var(--soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
@@ -98,24 +127,24 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
     <a class="home-back-link back-btn" href="index.html" aria-label="Back to lessons">←</a>
   </div>
   <div class="home-title">Thai Alphabet</div>
-  <div class="home-sub">Module 1 · Pronunciation Recognition</div>
-  <div class="section-label">Phase</div>
+  <div class="home-sub">Module 1 · Learn and test Thai letters</div>
+  <div class="section-label">Category</div>
   <div class="phase-grid">
-    <div class="phase-btn active" onclick="setPhase('consonant',this)"><span class="ph-label">Consonants</span><span class="ph-count">44</span></div>
-    <div class="phase-btn" onclick="setPhase('vowel',this)"><span class="ph-label">Vowels</span><span class="ph-count">32</span></div>
-    <div class="phase-btn" onclick="setPhase('all',this)"><span class="ph-label">Mixed</span><span class="ph-count">76</span></div>
+    <div class="phase-btn" data-phase="consonant" onclick="setPhase('consonant')"><span class="ph-label">Consonants</span><span class="ph-count">44</span></div>
+    <div class="phase-btn" data-phase="vowel" onclick="setPhase('vowel')"><span class="ph-label">Vowels</span><span class="ph-count">32</span></div>
+    <div class="phase-btn" data-phase="all" onclick="setPhase('all')"><span class="ph-label">All</span><span class="ph-count">76</span></div>
   </div>
   <div class="section-label">Mode</div>
   <div class="mode-grid">
-    <div class="mode-btn" onclick="startMode('learning')">
+    <div class="mode-btn disabled" onclick="startMode('learn')">
       <span class="mode-icon">📖</span>
-      <span class="mode-name">Learning</span>
-      <span class="mode-desc">10 questions. Focuses on weak letters.</span>
+      <span class="mode-name">Learn</span>
+      <span class="mode-desc">Choose a category first.</span>
     </div>
-    <div class="mode-btn challenge" onclick="startMode('challenge')">
+    <div class="mode-btn test disabled" onclick="startMode('test')">
       <span class="mode-icon">⚡</span>
-      <span class="mode-name">Challenge</span>
-      <span class="mode-desc">50 seconds. Answer as many as you can!</span>
+      <span class="mode-name">Test</span>
+      <span class="mode-desc">Choose a category first.</span>
     </div>
   </div>
   <div class="section-label">Your progress</div>
@@ -126,16 +155,95 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
   </div>
 </div>
 
-<div id="quiz">
+<!-- Learn mode: fixed-order study flow, not a quiz. -->
+<div id="learn">
   <div class="topbar">
     <div class="tb-left">
       <button class="back-btn" onclick="goHome()">←</button>
-      <div class="topbar-title" id="quiz-title">Learning</div>
+      <div class="topbar-title">Learn</div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="topbar-badge" id="pill">1/10</div>
-      <div class="timer-box" id="timer-box">50</div>
+    <div class="topbar-badge" id="learn-pill">1/44</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="learn-prog" style="width:0%"></div></div>
+  <div class="phase-grid learn-phase-grid">
+    <div class="phase-btn" data-phase="consonant" onclick="setPhase('consonant')"><span class="ph-label">Consonants</span><span class="ph-count">44</span></div>
+    <div class="phase-btn" data-phase="vowel" onclick="setPhase('vowel')"><span class="ph-label">Vowels</span><span class="ph-count">32</span></div>
+    <div class="phase-btn" data-phase="all" onclick="setPhase('all')"><span class="ph-label">All</span><span class="ph-count">76</span></div>
+  </div>
+  <div class="card learn-card">
+    <div class="letter-type consonant" id="learn-type">Consonant</div>
+    <div class="thai-letter learn-letter" id="learn-letter">ก</div>
+    <div class="learn-pronunciation" id="learn-pronunciation">gaw</div>
+    <div class="learn-sub" id="learn-name">gaw gai · chicken</div>
+  </div>
+  <div class="learn-controls">
+    <button class="toggle-btn" id="pron-toggle" onclick="togglePronunciation()">Hide pronunciation</button>
+    <button class="btn-primary" onclick="nextLearn()">Next →</button>
+  </div>
+  <div class="letter-bar" id="letter-bar"></div>
+</div>
+
+<!-- Test mode: choose the test type before starting a quiz. -->
+<div id="test-menu">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div class="topbar-title">Test</div>
     </div>
+    <div class="topbar-badge">Choose type</div>
+  </div>
+  <div class="test-panel" id="test-type-panel">
+    <div class="test-panel-title">Choose a Test</div>
+    <div class="test-panel-sub">Start with pronunciation, or preview the practice modes coming next.</div>
+    <div class="test-type-grid">
+      <button class="test-type-btn" onclick="showPronunciationSetup()">
+        <span class="mode-name">Pronunciation Test</span>
+        <span class="mode-desc">Match each Thai letter to the right pronunciation.</span>
+      </button>
+      <button class="test-type-btn" onclick="showWritingSetup()">
+        <span class="mode-name">Writing Test</span>
+        <span class="mode-desc">Practice writing from memory.</span>
+      </button>
+      <button class="test-type-btn" onclick="showKeyboardSetup()">
+        <span class="mode-name">Keyboard Practice</span>
+        <span class="mode-desc">Practice typing Thai letters.</span>
+      </button>
+    </div>
+  </div>
+  <div class="test-panel" id="pronunciation-setup" style="display:none">
+    <div class="test-panel-title">Pronunciation Test</div>
+    <div class="test-panel-sub">Choose the question order.</div>
+    <div class="order-grid">
+      <button class="btn-secondary" onclick="startPronunciationTest('ordered')">Ordered</button>
+      <button class="btn-primary" onclick="startPronunciationTest('random')">Random</button>
+    </div>
+  </div>
+  <div class="test-panel" id="writing-setup" style="display:none">
+    <div class="test-panel-title">Writing Test</div>
+    <div class="test-panel-sub">Write each Thai letter on paper first, then reveal the answer.</div>
+    <div class="order-grid">
+      <button class="btn-secondary" onclick="startWritingTest('ordered')">Ordered</button>
+      <button class="btn-primary" onclick="startWritingTest('random')">Random</button>
+    </div>
+  </div>
+  <div class="test-panel" id="keyboard-setup" style="display:none">
+    <div class="test-panel-title">Keyboard Practice</div>
+    <div class="test-panel-sub">Type the Thai letter shown. Correct entries advance automatically.</div>
+    <div class="order-grid">
+      <button class="btn-secondary" onclick="startKeyboardTest('ordered')">Ordered</button>
+      <button class="btn-primary" onclick="startKeyboardTest('random')">Random</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pronunciation Test: existing 4-option quiz flow. -->
+<div id="quiz">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="back-btn" onclick="backToTestMenu()">←</button>
+      <div class="topbar-title" id="quiz-title">Test</div>
+    </div>
+    <div class="topbar-badge" id="pill">1/10</div>
   </div>
   <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
   <div class="stats-row">
@@ -154,19 +262,56 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
   <button class="next-btn" id="next-btn" onclick="nextQ()">Continue →</button>
 </div>
 
+<!-- Writing Test: paper-based reveal practice, no scoring. -->
+<div id="writing-test">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="back-btn" onclick="backToTestMenu()">←</button>
+      <div class="topbar-title">Writing Test</div>
+    </div>
+    <div class="topbar-badge" id="writing-pill">1/10</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="writing-prog" style="width:0%"></div></div>
+  <div class="card learn-card">
+    <div class="letter-type consonant" id="writing-type">Consonant</div>
+    <div class="writing-prompt" id="writing-prompt">gaw</div>
+    <div class="thai-letter learn-letter hidden" id="writing-letter">ก</div>
+    <div class="writing-answer hidden" id="writing-answer"></div>
+  </div>
+  <button class="next-btn visible" id="show-answer-btn" onclick="showWritingAnswer()">Show Answer</button>
+  <button class="next-btn" id="writing-next-btn" onclick="nextWriting()">Next →</button>
+</div>
+
+<!-- Keyboard Practice: type the visible Thai letter, no buttons. -->
+<div id="keyboard-test">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="back-btn" onclick="backToTestMenu()">←</button>
+      <div class="topbar-title">Keyboard Practice</div>
+    </div>
+    <div class="topbar-badge" id="keyboard-pill">1/10</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="keyboard-prog" style="width:0%"></div></div>
+  <div class="card" id="keyboard-card">
+    <div class="letter-type consonant" id="keyboard-type">Consonant</div>
+    <div class="thai-letter" id="keyboard-letter">ก</div>
+  </div>
+  <input class="keyboard-input" id="keyboard-input" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" oninput="checkKeyboardInput()" aria-label="Type the Thai letter">
+  <div class="feedback" id="keyboard-feedback"></div>
+</div>
+
 <div id="result">
   <div class="r-icon" id="r-icon">🏆</div>
   <div class="r-title" id="r-title">Well done!</div>
   <div class="r-score" id="r-score">8/10</div>
   <div class="r-sub" id="r-sub"></div>
-  <div class="challenge-badge" id="challenge-badge" style="display:none"></div>
   <div class="r-stats">
     <div class="r-stat"><span>Correct</span><strong id="r-correct">0</strong></div>
     <div class="r-stat"><span>Best Streak</span><strong id="r-streak">0</strong></div>
     <div class="r-stat"><span>Learned</span><strong id="r-learned">0</strong></div>
   </div>
   <div class="r-actions">
-    <button class="btn-primary" onclick="startMode(currentMode)">Practice Again</button>
+    <button class="btn-primary" onclick="repeatCurrentTest()">Practice Again</button>
     <button class="btn-secondary" id="review-btn" onclick="reviewWrong()" style="display:none">Review Missed Letters</button>
     <button class="btn-secondary" onclick="goHome()">Back to Home</button>
   </div>
@@ -263,21 +408,32 @@ function updateLevel(thai,correct){
 }
 
 let pool=[...consonants],current=null,score=0,streak=0,bestStreak=0;
-let qIdx=0,wrongList=[],currentMode='learning',currentPhase='consonant';
-let timerInterval=null,timeLeft=50,totalAnswered=0;
+let qIdx=0,wrongList=[],currentMode='test',currentPhase=null;
+let testStep='menu'; // 'menu' | 'pronunciation-setup' | 'writing-setup' | 'keyboard-setup'
+let testOrder='random';
+let activeTestType='pronunciation';
+let quizQueue=[];
+let writingOrder='ordered',writingQueue=[],writingIdx=0,writingCurrent=null;
+let keyboardOrder='ordered',keyboardQueue=[],keyboardIdx=0,keyboardCurrent=null,keyboardLocked=false;
+let totalAnswered=0;
 let recentLetters=[];
+let learnPool=[...consonants],learnIdx=0,showPronunciation=true;
 const ROUND=10;
 const RECENT_LIMIT=3;
 
-function setPhase(phase,btn){
+function setPhase(phase){
   currentPhase=phase;
-  document.querySelectorAll('.phase-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.phase-btn').forEach(b=>b.classList.toggle('active',b.dataset.phase===phase));
+  document.querySelectorAll('#home .mode-btn').forEach(b=>b.classList.remove('disabled'));
+  document.querySelector('#home .mode-btn:not(.test) .mode-desc').textContent='Study letters in order. No score or feedback.';
+  document.querySelector('#home .mode-btn.test .mode-desc').textContent='4-option pronunciation quiz.';
   updateHomeSummary();
+  if(document.getElementById('learn').style.display==='flex')startLearn();
 }
 function getPool(phase){
   if(phase==='consonant')return consonants;
   if(phase==='vowel')return vowels;
+  if(phase==='all')return allLetters;
   return allLetters;
 }
 function updateHomeSummary(){
@@ -287,10 +443,64 @@ function updateHomeSummary(){
   document.getElementById('h-new').textContent=p.filter(l=>getLevel(l.thai)===0).length;
 }
 function goHome(){
-  clearInterval(timerInterval);
   recentLetters=[];
-  show('home');hide('quiz');hide('result');
+  show('home');hide('learn');hide('test-menu');hide('quiz');hide('writing-test');hide('keyboard-test');hide('result');
   updateHomeSummary();
+}
+
+// Learn mode: fixed-order study flow with no scoring or feedback.
+function startLearn(){
+  currentMode='learn';
+  learnPool=getPool(currentPhase);
+  learnIdx=0;
+  showPronunciation=true;
+  hide('home');hide('test-menu');hide('quiz');hide('writing-test');hide('keyboard-test');hide('result');show('learn');
+  buildLetterBar();
+  renderLearn();
+}
+
+function buildLetterBar(){
+  const bar=document.getElementById('letter-bar');
+  bar.innerHTML='';
+  learnPool.forEach((letter,idx)=>{
+    const btn=document.createElement('button');
+    btn.className='mini-letter';
+    btn.textContent=letter.thai;
+    btn.setAttribute('aria-label','Jump to '+letter.name);
+    btn.onclick=()=>jumpLearn(idx);
+    bar.appendChild(btn);
+  });
+}
+
+function renderLearn(){
+  const letter=learnPool[learnIdx];
+  const type=document.getElementById('learn-type');
+  type.textContent=letter.type==='consonant'?'Consonant':'Vowel';
+  type.className='letter-type '+letter.type;
+  document.getElementById('learn-letter').textContent=letter.thai;
+  const pronunciation=document.getElementById('learn-pronunciation');
+  pronunciation.textContent=letter.rom;
+  pronunciation.classList.toggle('hidden',!showPronunciation);
+  document.getElementById('learn-name').textContent=showPronunciation?letter.name+' · '+letter.meaning:'Recall the pronunciation, then reveal it.';
+  document.getElementById('pron-toggle').textContent=showPronunciation?'Hide pronunciation':'Show pronunciation';
+  document.getElementById('learn-pill').textContent=(learnIdx+1)+'/'+learnPool.length;
+  document.getElementById('learn-prog').style.width=((learnIdx+1)/learnPool.length*100)+'%';
+  document.querySelectorAll('.mini-letter').forEach((btn,idx)=>btn.classList.toggle('active',idx===learnIdx));
+}
+
+function jumpLearn(idx){
+  learnIdx=idx;
+  renderLearn();
+}
+
+function nextLearn(){
+  learnIdx=(learnIdx+1)%learnPool.length;
+  renderLearn();
+}
+
+function togglePronunciation(){
+  showPronunciation=!showPronunciation;
+  renderLearn();
 }
 
 // Smart selection: 30% new, 50% weak, 20% learned
@@ -300,6 +510,7 @@ function rememberRecent(thai){
   if(recentLetters.length>RECENT_LIMIT)recentLetters.shift();
 }
 function selectNext(){
+  if(quizQueue.length)return quizQueue[qIdx%quizQueue.length];
   const filtered=pool.filter(l=>!recentLetters.includes(l.thai));
   const source=filtered.length?filtered:pool;
   const newL=source.filter(l=>getLevel(l.thai)===0);
@@ -316,23 +527,164 @@ function selectNext(){
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
 function startMode(mode){
-  currentMode=mode;
+  if(!currentPhase)return;
+  if(mode==='learn'){
+    startLearn();
+    return;
+  }
+  if(mode==='test'){
+    currentMode='test';
+    testStep='menu';
+    hide('home');hide('learn');hide('quiz');hide('writing-test');hide('keyboard-test');hide('result');show('test-menu');
+    renderTestStep();
+    return;
+  }
+}
+
+function renderTestStep(){
+  document.getElementById('test-type-panel').style.display=testStep==='menu'?'block':'none';
+  document.getElementById('pronunciation-setup').style.display=testStep==='pronunciation-setup'?'block':'none';
+  document.getElementById('writing-setup').style.display=testStep==='writing-setup'?'block':'none';
+  document.getElementById('keyboard-setup').style.display=testStep==='keyboard-setup'?'block':'none';
+}
+
+function showPronunciationSetup(){
+  activeTestType='pronunciation';
+  testStep='pronunciation-setup';
+  renderTestStep();
+}
+
+function showWritingSetup(){
+  activeTestType='writing';
+  testStep='writing-setup';
+  renderTestStep();
+}
+
+function showKeyboardSetup(){
+  activeTestType='keyboard';
+  testStep='keyboard-setup';
+  renderTestStep();
+}
+
+function backToTestMenu(){
+  hide('quiz');hide('writing-test');hide('keyboard-test');hide('result');show('test-menu');
+  if(activeTestType==='pronunciation')testStep='pronunciation-setup';
+  if(activeTestType==='writing')testStep='writing-setup';
+  if(activeTestType==='keyboard')testStep='keyboard-setup';
+  renderTestStep();
+}
+
+function startPronunciationTest(order){
+  currentMode='test';
+  activeTestType='pronunciation';
+  testOrder=order;
   pool=getPool(currentPhase);
+  quizQueue=order==='ordered'?[...pool]:shuffle([...pool]);
   score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];
-  hide('home');hide('result');show('quiz');
-  document.getElementById('quiz-title').textContent=mode==='challenge'?'Challenge':'Learning';
-  const tb=document.getElementById('timer-box');
-  clearInterval(timerInterval);
-  if(mode==='challenge'){
-    timeLeft=50;tb.textContent=50;
-    tb.classList.add('visible');tb.classList.remove('urgent');
-    timerInterval=setInterval(()=>{
-      timeLeft--;tb.textContent=timeLeft;
-      if(timeLeft<=10)tb.classList.add('urgent');
-      if(timeLeft<=0){clearInterval(timerInterval);showResult();}
-    },1000);
-  }else{tb.classList.remove('visible');}
+  hide('home');hide('learn');hide('test-menu');hide('writing-test');hide('keyboard-test');hide('result');show('quiz');
+  document.getElementById('quiz-title').textContent='Pronunciation Test';
   updateStats();loadQ();
+}
+
+function startWritingTest(order){
+  currentMode='test';
+  activeTestType='writing';
+  testStep='writing-setup';
+  writingOrder=order;
+  const writingPool=getPool(currentPhase);
+  writingQueue=order==='ordered'?[...writingPool]:shuffle([...writingPool]);
+  writingIdx=0;
+  hide('home');hide('learn');hide('test-menu');hide('quiz');hide('keyboard-test');hide('result');show('writing-test');
+  renderWriting();
+}
+
+function startKeyboardTest(order){
+  currentMode='test';
+  activeTestType='keyboard';
+  testStep='keyboard-setup';
+  keyboardOrder=order;
+  const keyboardPool=getPool(currentPhase);
+  keyboardQueue=order==='ordered'?[...keyboardPool]:shuffle([...keyboardPool]);
+  keyboardIdx=0;
+  hide('home');hide('learn');hide('test-menu');hide('quiz');hide('writing-test');hide('result');show('keyboard-test');
+  renderKeyboard();
+}
+
+function renderKeyboard(){
+  keyboardCurrent=keyboardQueue[keyboardIdx%keyboardQueue.length];
+  keyboardLocked=false;
+  const type=document.getElementById('keyboard-type');
+  type.textContent=keyboardCurrent.type==='consonant'?'Consonant':'Vowel';
+  type.className='letter-type '+keyboardCurrent.type;
+  document.getElementById('keyboard-letter').textContent=keyboardCurrent.thai;
+  document.getElementById('keyboard-pill').textContent=(keyboardIdx+1)+'/'+keyboardQueue.length;
+  document.getElementById('keyboard-prog').style.width=((keyboardIdx+1)/keyboardQueue.length*100)+'%';
+  const feedback=document.getElementById('keyboard-feedback');
+  feedback.textContent='';
+  feedback.className='feedback';
+  const input=document.getElementById('keyboard-input');
+  input.value='';
+  input.maxLength=Array.from(keyboardCurrent.thai).length;
+  setTimeout(()=>input.focus(),0);
+}
+
+function checkKeyboardInput(){
+  if(keyboardLocked||!keyboardCurrent)return;
+  const input=document.getElementById('keyboard-input');
+  const typed=input.value;
+  if(Array.from(typed).length<Array.from(keyboardCurrent.thai).length)return;
+  const feedback=document.getElementById('keyboard-feedback');
+  if(typed===keyboardCurrent.thai){
+    keyboardLocked=true;
+    feedback.textContent='✓ Correct!';
+    feedback.className='feedback correct';
+    setTimeout(()=>{
+      keyboardIdx=(keyboardIdx+1)%keyboardQueue.length;
+      renderKeyboard();
+    },550);
+  }else{
+    feedback.textContent='✗ Try again';
+    feedback.className='feedback wrong';
+    input.value='';
+    input.focus();
+  }
+}
+
+function renderWriting(){
+  writingCurrent=writingQueue[writingIdx%writingQueue.length];
+  const type=document.getElementById('writing-type');
+  type.textContent=writingCurrent.type==='consonant'?'Consonant':'Vowel';
+  type.className='letter-type '+writingCurrent.type;
+  const prompt=document.getElementById('writing-prompt');
+  prompt.textContent=writingCurrent.rom;
+  prompt.classList.remove('hidden');
+  const letter=document.getElementById('writing-letter');
+  letter.textContent=writingCurrent.thai;
+  letter.classList.add('hidden');
+  const answer=document.getElementById('writing-answer');
+  answer.textContent='';
+  answer.classList.add('hidden');
+  document.getElementById('show-answer-btn').classList.add('visible');
+  document.getElementById('writing-next-btn').classList.remove('visible');
+  document.getElementById('writing-pill').textContent=(writingIdx+1)+'/'+writingQueue.length;
+  document.getElementById('writing-prog').style.width=((writingIdx+1)/writingQueue.length*100)+'%';
+}
+
+function showWritingAnswer(){
+  if(!writingCurrent)return;
+  document.getElementById('writing-prompt').classList.add('hidden');
+  document.getElementById('writing-letter').classList.remove('hidden');
+  const answer=document.getElementById('writing-answer');
+  answer.innerHTML='';
+  answer.appendChild(document.createTextNode(writingCurrent.name+' · '+writingCurrent.meaning));
+  answer.classList.remove('hidden');
+  document.getElementById('show-answer-btn').classList.remove('visible');
+  document.getElementById('writing-next-btn').classList.add('visible');
+}
+
+function nextWriting(){
+  writingIdx=(writingIdx+1)%writingQueue.length;
+  renderWriting();
 }
 
 function loadQ(){
@@ -347,7 +699,7 @@ function loadQ(){
   for(let i=0;i<3;i++){const d=document.createElement('div');d.className='prof-dot'+(i<lv?' filled':'');dotsEl.appendChild(d);}
   document.getElementById('thai-letter').textContent=current.thai;
   const nm=document.getElementById('letter-name');nm.textContent='';nm.classList.add('hidden');
-  if(currentMode==='learning'){
+  if(currentMode==='test'){
     document.getElementById('prog').style.width=((qIdx/ROUND)*100)+'%';
     document.getElementById('pill').textContent=(qIdx+1)+'/'+ROUND;
   }else{
@@ -395,31 +747,22 @@ function checkAnswer(btn,isCorrect){
     fb.textContent='✗ "'+current.rom+'" — '+current.name;fb.className='feedback wrong';
   }
   updateStats();qIdx++;
-  if(currentMode==='learning'&&qIdx>=ROUND){setTimeout(()=>showResult(),700);}
+  if(currentMode==='test'&&qIdx>=ROUND){setTimeout(()=>showResult(),700);}
   else{document.getElementById('next-btn').classList.add('visible');}
 }
 
 function nextQ(){loadQ();}
 
 function showResult(){
-  clearInterval(timerInterval);hide('quiz');show('result');
-  const total=currentMode==='learning'?ROUND:totalAnswered;
+  hide('quiz');show('result');
+  const total=ROUND;
   const pct=total>0?score/total:0;
   const learnedCount=getPool(currentPhase).filter(l=>getLevel(l.thai)>=3).length;
   let icon,title,sub;
-  const cb=document.getElementById('challenge-badge');
-  if(currentMode==='challenge'){
-    icon='⚡';title="Time's up!";
-    sub='You answered '+totalAnswered+' questions in 50 seconds.';
-    cb.style.display='block';
-    cb.textContent='⚡ '+score+' correct · Accuracy: '+(totalAnswered>0?Math.round(score/totalAnswered*100):0)+'%';
-  }else{
-    cb.style.display='none';
-    if(pct===1){icon='🏆';title='Perfect!';sub='Every letter correct. สุดยอด!';}
-    else if(pct>=0.8){icon='⭐';title='Excellent!';sub='Almost perfect. Keep it up!';}
-    else if(pct>=0.6){icon='👍';title='Good job!';sub='Keep focusing on weak letters.';}
-    else{icon='📖';title='Keep going!';sub='Every mistake is progress!';}
-  }
+  if(pct===1){icon='🏆';title='Perfect!';sub='Every letter correct. สุดยอด!';}
+  else if(pct>=0.8){icon='⭐';title='Excellent!';sub='Almost perfect. Keep it up!';}
+  else if(pct>=0.6){icon='👍';title='Good job!';sub='Keep focusing on weak letters.';}
+  else{icon='📖';title='Keep going!';sub='Every mistake is progress!';}
   document.getElementById('r-icon').textContent=icon;
   document.getElementById('r-title').textContent=title;
   document.getElementById('r-score').textContent=score+'/'+total;
@@ -431,13 +774,27 @@ function showResult(){
   updateHomeSummary();
 }
 
+function repeatCurrentTest(){
+  if(activeTestType==='pronunciation'){
+    startPronunciationTest(testOrder);
+  }else if(activeTestType==='writing'){
+    startWritingTest(writingOrder);
+  }else if(activeTestType==='keyboard'){
+    startKeyboardTest(keyboardOrder);
+  }else{
+    startMode('test');
+  }
+}
+
 function reviewWrong(){
   const missed=[...new Set(wrongList.map(l=>l.thai))];
   pool=allLetters.filter(l=>missed.includes(l.thai));
-  score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];currentMode='learning';
-  hide('result');show('quiz');
+  score=0;streak=0;bestStreak=0;qIdx=0;wrongList=[];totalAnswered=0;recentLetters=[];currentMode='test';
+  activeTestType='pronunciation';
+  testOrder='random';
+  quizQueue=shuffle([...pool]);
+  hide('test-menu');hide('writing-test');hide('keyboard-test');hide('result');show('quiz');
   document.getElementById('quiz-title').textContent='Review';
-  document.getElementById('timer-box').classList.remove('visible');
   updateStats();loadQ();
 }
 
