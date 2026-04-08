@@ -55,6 +55,8 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
 .test-type-grid{display:grid;grid-template-columns:1fr;gap:10px;width:100%;}
 .test-type-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;transition:.15s;}
 .test-type-btn:hover{border-color:var(--accent);background:#FFF7F5;}
+.test-inline-setup{display:none;border:1.5px solid var(--border);border-radius:12px;padding:14px;background:#FFF7F5;}
+.test-inline-setup .test-panel-title{font-size:1.15rem;}
 .order-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;}
 #quiz,#writing-test,#keyboard-test{display:none;flex-direction:column;align-items:center;min-height:100vh;}
 .topbar{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;background:var(--bg);z-index:10;}
@@ -194,44 +196,44 @@ body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);min
   </div>
   <div class="test-panel" id="test-type-panel">
     <div class="test-panel-title">Choose a Test</div>
-    <div class="test-panel-sub">Start with pronunciation, or preview the practice modes coming next.</div>
+    <div class="test-panel-sub">Choose a practice type, then choose the question order.</div>
     <div class="test-type-grid">
       <button class="test-type-btn" onclick="showPronunciationSetup()">
         <span class="mode-name">Pronunciation Test</span>
         <span class="mode-desc">Match each Thai letter to the right pronunciation.</span>
       </button>
+      <div class="test-inline-setup" id="pronunciation-setup">
+        <div class="test-panel-title">Pronunciation Test</div>
+        <div class="test-panel-sub">Choose the question order.</div>
+        <div class="order-grid">
+          <button class="btn-secondary" onclick="startPronunciationTest('ordered')">Ordered</button>
+          <button class="btn-primary" onclick="startPronunciationTest('random')">Random</button>
+        </div>
+      </div>
       <button class="test-type-btn" onclick="showWritingSetup()">
         <span class="mode-name">Writing Test</span>
         <span class="mode-desc">Practice writing from memory.</span>
       </button>
+      <div class="test-inline-setup" id="writing-setup">
+        <div class="test-panel-title">Writing Test</div>
+        <div class="test-panel-sub">Write each Thai letter on paper first, then reveal the answer.</div>
+        <div class="order-grid">
+          <button class="btn-secondary" onclick="startWritingTest('ordered')">Ordered</button>
+          <button class="btn-primary" onclick="startWritingTest('random')">Random</button>
+        </div>
+      </div>
       <button class="test-type-btn" onclick="showKeyboardSetup()">
         <span class="mode-name">Keyboard Practice</span>
         <span class="mode-desc">Practice typing Thai letters.</span>
       </button>
-    </div>
-  </div>
-  <div class="test-panel" id="pronunciation-setup" style="display:none">
-    <div class="test-panel-title">Pronunciation Test</div>
-    <div class="test-panel-sub">Choose the question order.</div>
-    <div class="order-grid">
-      <button class="btn-secondary" onclick="startPronunciationTest('ordered')">Ordered</button>
-      <button class="btn-primary" onclick="startPronunciationTest('random')">Random</button>
-    </div>
-  </div>
-  <div class="test-panel" id="writing-setup" style="display:none">
-    <div class="test-panel-title">Writing Test</div>
-    <div class="test-panel-sub">Write each Thai letter on paper first, then reveal the answer.</div>
-    <div class="order-grid">
-      <button class="btn-secondary" onclick="startWritingTest('ordered')">Ordered</button>
-      <button class="btn-primary" onclick="startWritingTest('random')">Random</button>
-    </div>
-  </div>
-  <div class="test-panel" id="keyboard-setup" style="display:none">
-    <div class="test-panel-title">Keyboard Practice</div>
-    <div class="test-panel-sub">Type the Thai letter shown. Correct entries advance automatically.</div>
-    <div class="order-grid">
-      <button class="btn-secondary" onclick="startKeyboardTest('ordered')">Ordered</button>
-      <button class="btn-primary" onclick="startKeyboardTest('random')">Random</button>
+      <div class="test-inline-setup" id="keyboard-setup">
+        <div class="test-panel-title">Keyboard Practice</div>
+        <div class="test-panel-sub">Type the Thai letter shown. Correct entries advance automatically.</div>
+        <div class="order-grid">
+          <button class="btn-secondary" onclick="startKeyboardTest('ordered')">Ordered</button>
+          <button class="btn-primary" onclick="startKeyboardTest('random')">Random</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -542,7 +544,7 @@ function startMode(mode){
 }
 
 function renderTestStep(){
-  document.getElementById('test-type-panel').style.display=testStep==='menu'?'block':'none';
+  document.getElementById('test-type-panel').style.display='block';
   document.getElementById('pronunciation-setup').style.display=testStep==='pronunciation-setup'?'block':'none';
   document.getElementById('writing-setup').style.display=testStep==='writing-setup'?'block':'none';
   document.getElementById('keyboard-setup').style.display=testStep==='keyboard-setup'?'block':'none';
@@ -568,9 +570,7 @@ function showKeyboardSetup(){
 
 function backToTestMenu(){
   hide('quiz');hide('writing-test');hide('keyboard-test');hide('result');show('test-menu');
-  if(activeTestType==='pronunciation')testStep='pronunciation-setup';
-  if(activeTestType==='writing')testStep='writing-setup';
-  if(activeTestType==='keyboard')testStep='keyboard-setup';
+  testStep='menu';
   renderTestStep();
 }
 
