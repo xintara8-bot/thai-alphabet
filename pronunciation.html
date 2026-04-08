@@ -643,10 +643,14 @@ function checkKeyboardInput(){
       renderKeyboard();
     },550);
   }else{
+    keyboardLocked=true;
     feedback.textContent='✗ Try again';
     feedback.className='feedback wrong';
-    input.value='';
-    input.focus();
+    setTimeout(()=>{
+      input.value='';
+      keyboardLocked=false;
+      input.focus();
+    },450);
   }
 }
 
